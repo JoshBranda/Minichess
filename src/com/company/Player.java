@@ -7,7 +7,7 @@ import java.util.List;
 abstract class Player {
     protected static final int rows = 6;
     protected static final int columns = 5;
-    protected static final int depth = 6;
+    protected static final int depth = 8;
     protected static final int MAX = 41;
 
     protected int numPieces;

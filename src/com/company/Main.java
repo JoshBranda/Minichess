@@ -144,7 +144,7 @@ public class Main {
 
 
         //myClient.offer('W');
-        myClient.accept("17103",'W');
+        myClient.accept("17106",'W');
 
         while (true) {
             char []myChoice = new char[5];
