@@ -49,7 +49,7 @@ public class White extends Player {
         int [] choice = new int[4];
 
         //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHH");
-        int negVal = -chooseMove(board, choice, opponent, depth);
+        int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000);
 
         //System.out.printf("%d%d-%d%d\n", choice[0], choice[1], choice[2], choice[3]);
         //displayBoard(board);
@@ -170,7 +170,7 @@ public class White extends Player {
     }
     */
 
-    public int chooseMove(char [][] board, int [] choice, Black opponent, int depth) {
+    public int chooseMove(char [][] board, int [] choice, Black opponent, int depth, int alpha, int beta) {
         if (depth == 0 || moveCount == MAX) {
             //System.out.printf("%d White value\n", this.evalPlayer() - opponent.evalPlayer());
             return -(this.evalPlayer() - opponent.evalPlayer());
@@ -199,7 +199,7 @@ public class White extends Player {
             addQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY(), 'Q');
 
         incrementMoves();
-        int negaMax = opponent.chooseMove(board, choice, this, depth-1);
+        int negaMax = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha);
         //System.out.printf("%d value\n", negaMax);
         decrementMoves();
 
@@ -211,6 +211,13 @@ public class White extends Player {
 
         if (myMoves.get(0).undoMove(board))
             removeQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY());
+
+        if (negaMax > beta) {
+            return -negaMax;
+        }
+
+        if (negaMax > alpha)
+            alpha = negaMax;
 
         /*
         System.out.print("White: ");
@@ -237,12 +244,16 @@ public class White extends Player {
                 addQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY(), 'Q');
 
             incrementMoves();
-            temp = opponent.chooseMove(board, choice, this, depth-1);
+            temp = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha);
             //System.out.printf("%d value\n", temp);
             decrementMoves();
 
             if (myMoves.get(x).undoMove(board))
                 removeQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY());
+
+            if (temp >= beta) {
+                return -temp;
+            }
 
             //System.out.printf("Current White:%d Negamax:%d\n", temp, negaMax);
             if (temp > negaMax) {
@@ -253,6 +264,9 @@ public class White extends Player {
                    //System.out.printf("%d%d %d%d updated\n", choice[0], choice[1], choice[2], choice[3]);
                 }
             }
+
+            if (temp > alpha)
+                alpha = temp;
             /*
             System.out.print("White: ");
             myMoves.get(x).displayLine();

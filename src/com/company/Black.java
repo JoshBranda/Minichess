@@ -114,7 +114,7 @@ public class Black extends Player {
     }
     */
 
-    public int chooseMove(char [][] board, int [] choice, White opponent, int depth) {
+    public int chooseMove(char [][] board, int [] choice, White opponent, int depth, int alpha, int beta) {
         if (depth == 0 || moveCount == MAX) {
             //System.out.printf("%d Black value\n", this.evalPlayer() - opponent.evalPlayer());
             return -(this.evalPlayer() - opponent.evalPlayer());
@@ -146,7 +146,7 @@ public class Black extends Player {
             addQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY(), 'q');
 
         incrementMoves();
-        int negaMax = opponent.chooseMove(board, choice, this, depth-1);
+        int negaMax = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha);
        // System.out.printf("%d Black value\n", negaMax);
         decrementMoves();
 
@@ -156,8 +156,14 @@ public class Black extends Player {
         if (depth == this.depth)
             myMoves.get(0).setChoice(choice);
 
-        int length = myMoves.size();
+        if (negaMax > beta) {
+            return -negaMax;
+        }
 
+        if (negaMax > alpha)
+            alpha = negaMax;
+
+        int length = myMoves.size();
         /*
         System.out.print("Black: ");
         myMoves.get(0).displayLine();
@@ -175,19 +181,25 @@ public class Black extends Player {
                 addQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY(), 'q');
 
             incrementMoves();
-            temp = opponent.chooseMove(board, choice, this, depth-1);
+            temp = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha);
             //System.out.printf("%d Black value\n", temp);
             decrementMoves();
 
             if (myMoves.get(x).undoMove(board))
                 removeQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY());
 
+            if (temp >= beta) {
+                return -temp;
+            }
         //    System.out.printf("Current Black:%d Negamax:%d\n", temp, negaMax);
             if (temp > negaMax) {
                 negaMax = temp;
                 if (depth == this.depth)
                     myMoves.get(x).setChoice(choice);
             }
+
+            if (temp > alpha)
+                alpha = temp;
 /*
             System.out.print("Black: ");
             myMoves.get(x).displayLine();
