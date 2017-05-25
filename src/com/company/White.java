@@ -183,6 +183,8 @@ public class White extends Player {
             pieces.get(x).checkMoves(board, opponent, myMoves);
         }
 
+        Collections.sort(myMoves);
+
         //displayPositions();
         //System.out.println(depth);
 

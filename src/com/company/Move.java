@@ -2,16 +2,17 @@ package com.company;
 /**
  * Created by joshuasander on 4/29/17.
  */
-public class Move {
+public class Move implements Comparable<Move>{
     private int oldX, oldY, newX, newY;
     private char takenPiece, attackPiece;
     private boolean promotion;
     private Piece myPiece;
     private Piece opponentPiece;
+    private int value;
 
     public Move () {};
 
-    public Move(int prevX, int prevY, int curX, int curY, Piece toPiece, Piece toOpponent) {
+    public Move(int prevX, int prevY, int curX, int curY, Piece toPiece, Piece toOpponent, int toValue) {
         oldX = prevX;
         oldY = prevY;
         newX = curX;
@@ -19,6 +20,15 @@ public class Move {
         promotion = false;
         myPiece = toPiece;
         opponentPiece = toOpponent;
+        value = toValue;
+    }
+
+    public int getValue(){return value;}
+
+    @Override
+    public int compareTo(Move comparestu) {
+        int compareage=((Move)comparestu).getValue();
+            return compareage-this.value;
     }
 
     public int getNewX(){return newX;}

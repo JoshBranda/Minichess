@@ -140,11 +140,11 @@ public class Main {
 
         char [] myArray = new char[5];
 
-        Client myClient = new Client("imcs.svcs.cs.pdx.edu","3589","guest52744","minichess1");
+        Client myClient = new Client("imcs.svcs.cs.pdx.edu","3589","lizardSpock","minichess1");
 
 
         //myClient.offer('W');
-        myClient.accept("17106",'W');
+        myClient.accept("17259",'W');
 
         while (true) {
             char []myChoice = new char[5];

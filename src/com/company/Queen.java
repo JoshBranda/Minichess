@@ -25,6 +25,8 @@ public class Queen extends Piece {
         if (taken)
             return 0;
 
+        int value;
+
         int tempX = 1;
         int tempY = 1;
         char current = '.';
@@ -40,7 +42,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x - tempX, y - tempY);
-            Move temp = new Move(x, y, x - tempX, y - tempY, this, temp3);
+            value = getValue(myBoard[x-tempX][y-tempY]);
+            Move temp = new Move(x, y, x - tempX, y - tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -57,7 +60,8 @@ public class Queen extends Piece {
             tempX--;
 
             Piece temp3 = opponent.takenPiece(x - tempX, y);
-            Move temp = new Move(x, y, x - tempX, y, this, temp3);
+            value = getValue(myBoard[x-tempX][y]);
+            Move temp = new Move(x, y, x - tempX, y, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -76,7 +80,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x - tempX, y + tempY);
-            Move temp = new Move(x, y, x - tempX, y + tempY, this, temp3);
+            value = getValue(myBoard[x-tempX][y+tempY]);
+            Move temp = new Move(x, y, x - tempX, y + tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -93,7 +98,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x, y + tempY);
-            Move temp = new Move(x, y, x, y + tempY, this, temp3);
+            value = getValue(myBoard[x][y+tempY]);
+            Move temp = new Move(x, y, x, y + tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -112,7 +118,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x + tempX, y + tempY);
-            Move temp = new Move(x, y, x + tempX, y + tempY, this, temp3);
+            value = getValue(myBoard[x+tempX][y+tempY]);
+            Move temp = new Move(x, y, x + tempX, y + tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -129,7 +136,8 @@ public class Queen extends Piece {
             tempX--;
 
             Piece temp3 = opponent.takenPiece(x + tempX, y);
-            Move temp = new Move(x, y, x + tempX, y, this, temp3);
+            value = getValue(myBoard[x+tempX][y]);
+            Move temp = new Move(x, y, x + tempX, y, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -148,7 +156,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x + tempX, y - tempY);
-            Move temp = new Move(x, y, x + tempX, y - tempY, this, temp3);
+            value = getValue(myBoard[x+tempX][y-tempY]);
+            Move temp = new Move(x, y, x + tempX, y - tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -165,7 +174,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x, y - tempY);
-            Move temp = new Move(x, y, x, y - tempY, this, temp3);
+            value = getValue(myBoard[x][y-tempY]);
+            Move temp = new Move(x, y, x, y - tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -180,7 +190,7 @@ public class Queen extends Piece {
             current = myBoard[x - tempX][y - tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x - tempX, y - tempY, this, null);
+                Move temp = new Move(x, y, x - tempX, y - tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -196,7 +206,7 @@ public class Queen extends Piece {
             current = myBoard[x - tempX][y];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x - tempX, y, this, null);
+                Move temp = new Move(x, y, x - tempX, y, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -211,7 +221,7 @@ public class Queen extends Piece {
             current = myBoard[x - tempX][y + tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x - tempX, y + tempY, this, null);
+                Move temp = new Move(x, y, x - tempX, y + tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -227,7 +237,7 @@ public class Queen extends Piece {
             current = myBoard[x][y + tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x, y + tempY, this, null);
+                Move temp = new Move(x, y, x, y + tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -243,7 +253,7 @@ public class Queen extends Piece {
             current = myBoard[x + tempX][y + tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x + tempX, y + tempY, this, null);
+                Move temp = new Move(x, y, x + tempX, y + tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -259,7 +269,7 @@ public class Queen extends Piece {
             current = myBoard[x + tempX][y];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x + tempX, y, this, null);
+                Move temp = new Move(x, y, x + tempX, y, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -274,7 +284,7 @@ public class Queen extends Piece {
             current = myBoard[x + tempX][y - tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x + tempX, y - tempY, this, null);
+                Move temp = new Move(x, y, x + tempX, y - tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -290,7 +300,7 @@ public class Queen extends Piece {
             current = myBoard[x][y - tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x, y - tempY, this, null);
+                Move temp = new Move(x, y, x, y - tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -305,6 +315,8 @@ public class Queen extends Piece {
     public int checkMoves(char[][] myBoard, White opponent, List<Move> myMoves) {
         if (taken)
             return 0;
+
+        int value;
 
         int tempX = 1;
         int tempY = 1;
@@ -321,7 +333,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x - tempX, y - tempY);
-            Move temp = new Move(x, y, x - tempX, y - tempY, this, temp3);
+            value = getValue(myBoard[x-tempX][y-tempY]);
+            Move temp = new Move(x, y, x - tempX, y - tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -338,7 +351,8 @@ public class Queen extends Piece {
             tempX--;
 
             Piece temp3 = opponent.takenPiece(x - tempX, y);
-            Move temp = new Move(x, y, x - tempX, y, this, temp3);
+            value = getValue(myBoard[x-tempX][y]);
+            Move temp = new Move(x, y, x - tempX, y, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -357,7 +371,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x - tempX, y + tempY);
-            Move temp = new Move(x, y, x - tempX, y + tempY, this, temp3);
+            value = getValue(myBoard[x-tempX][y+tempY]);
+            Move temp = new Move(x, y, x - tempX, y + tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -374,7 +389,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x, y + tempY);
-            Move temp = new Move(x, y, x, y + tempY, this, temp3);
+            value = getValue(myBoard[x][y+tempY]);
+            Move temp = new Move(x, y, x, y + tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -393,7 +409,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x + tempX, y + tempY);
-            Move temp = new Move(x, y, x + tempX, y + tempY, this, temp3);
+            value = getValue(myBoard[x+tempX][y+tempY]);
+            Move temp = new Move(x, y, x + tempX, y + tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -410,7 +427,8 @@ public class Queen extends Piece {
             tempX--;
 
             Piece temp3 = opponent.takenPiece(x + tempX, y);
-            Move temp = new Move(x, y, x + tempX, y, this, temp3);
+            value = getValue(myBoard[x+tempX][y]);
+            Move temp = new Move(x, y, x + tempX, y, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -429,7 +447,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x + tempX, y - tempY);
-            Move temp = new Move(x, y, x + tempX, y - tempY, this, temp3);
+            value = getValue(myBoard[x+tempX][y-tempY]);
+            Move temp = new Move(x, y, x + tempX, y - tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -446,7 +465,8 @@ public class Queen extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x, y - tempY);
-            Move temp = new Move(x, y, x, y - tempY, this, temp3);
+            value = getValue(myBoard[x][y-tempY]);
+            Move temp = new Move(x, y, x, y - tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -461,7 +481,7 @@ public class Queen extends Piece {
             current = myBoard[x - tempX][y - tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x - tempX, y - tempY, this, null);
+                Move temp = new Move(x, y, x - tempX, y - tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -477,7 +497,7 @@ public class Queen extends Piece {
             current = myBoard[x - tempX][y];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x - tempX, y, this, null);
+                Move temp = new Move(x, y, x - tempX, y, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -492,7 +512,7 @@ public class Queen extends Piece {
             current = myBoard[x - tempX][y + tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x - tempX, y + tempY, this, null);
+                Move temp = new Move(x, y, x - tempX, y + tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -508,7 +528,7 @@ public class Queen extends Piece {
             current = myBoard[x][y + tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x, y + tempY, this, null);
+                Move temp = new Move(x, y, x, y + tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -524,7 +544,7 @@ public class Queen extends Piece {
             current = myBoard[x + tempX][y + tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x + tempX, y + tempY, this, null);
+                Move temp = new Move(x, y, x + tempX, y + tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -540,7 +560,7 @@ public class Queen extends Piece {
             current = myBoard[x + tempX][y];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x + tempX, y, this, null);
+                Move temp = new Move(x, y, x + tempX, y, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -555,7 +575,7 @@ public class Queen extends Piece {
             current = myBoard[x + tempX][y - tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x + tempX, y - tempY, this, null);
+                Move temp = new Move(x, y, x + tempX, y - tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;
@@ -571,7 +591,7 @@ public class Queen extends Piece {
             current = myBoard[x][y - tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x, y - tempY, this, null);
+                Move temp = new Move(x, y, x, y - tempY, this, null, 0);
                 myMoves.add(temp);
             } else
                 break;

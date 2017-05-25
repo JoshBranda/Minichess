@@ -20,6 +20,8 @@ public class Bishop extends Piece {
         if (taken)
             return 0;
 
+        int value;
+
         int tempX = 1;
         int tempY = 1;
         char current = '.';
@@ -35,7 +37,8 @@ public class Bishop extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x-tempX,y-tempY);
-            Move temp = new Move(x, y, x-tempX, y-tempY, this, temp3);
+            value = getValue(myBoard[x-tempX][y-tempY]);
+            Move temp = new Move(x, y, x-tempX, y-tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -55,7 +58,8 @@ public class Bishop extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x-tempX,y+tempY);
-            Move temp = new Move(x, y, x-tempX, y+tempY, this, temp3);
+            value = getValue(myBoard[x-tempX][y+tempY]);
+            Move temp = new Move(x, y, x-tempX, y+tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -74,7 +78,8 @@ public class Bishop extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x+tempX,y+tempY);
-            Move temp = new Move(x, y, x+tempX, y+tempY, this, temp3);
+            value = getValue(myBoard[x+tempX][y+tempY]);
+            Move temp = new Move(x, y, x+tempX, y+tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -93,7 +98,8 @@ public class Bishop extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x+tempX,y-tempY);
-            Move temp = new Move(x, y, x+tempX, y-tempY, this, temp3);
+            value = getValue(myBoard[x+tempX][y-tempY]);
+            Move temp = new Move(x, y, x+tempX, y-tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -102,22 +108,22 @@ public class Bishop extends Piece {
          */
 
         if (x - 1 >= 0 && myBoard[x - 1][y] == '.') {//Can move up
-            Move temp = new Move(x, y, x - 1, y, this, null);
+            Move temp = new Move(x, y, x - 1, y, this, null, 0);
             myMoves.add(temp);
         }
 
         if (y + 1 < columns && myBoard[x][y+1] == '.') {//Can move right
-            Move temp = new Move(x, y, x, y+1, this, null);
+            Move temp = new Move(x, y, x, y+1, this, null, 0);
             myMoves.add(temp);
         }
 
         if (x +1 < rows && myBoard[x + 1][y] == '.') {//Can move down
-            Move temp = new Move(x, y, x + 1, y, this, null);
+            Move temp = new Move(x, y, x + 1, y, this, null, 0);
             myMoves.add(temp);
         }
 
         if (y - 1 >= columns && myBoard[x][y-1] == '.') {//Can move left
-            Move temp = new Move(x, y, x, y - 1, this, null);
+            Move temp = new Move(x, y, x, y - 1, this, null, 0);
             myMoves.add(temp);
         }
 
@@ -128,7 +134,7 @@ public class Bishop extends Piece {
             current = myBoard[x - tempX][y - tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x-tempX, y-tempY, this, null);
+                Move temp = new Move(x, y, x-tempX, y-tempY, this, null, 0);
                 myMoves.add(temp);
             }
 
@@ -147,7 +153,7 @@ public class Bishop extends Piece {
             current = myBoard[x - tempX][y+tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x-tempX, y+tempY, this, null);
+                Move temp = new Move(x, y, x-tempX, y+tempY, this, null, 0);
                 myMoves.add(temp);
             }
 
@@ -165,7 +171,7 @@ public class Bishop extends Piece {
             current = myBoard[x + tempX][y+tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x+tempX, y+tempY, this, null);
+                Move temp = new Move(x, y, x+tempX, y+tempY, this, null, 0);
                 myMoves.add(temp);
             }
 
@@ -183,7 +189,7 @@ public class Bishop extends Piece {
             current = myBoard[x + tempX][y-tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x+tempX, y-tempY, this, null);
+                Move temp = new Move(x, y, x+tempX, y-tempY, this, null, 0);
                 myMoves.add(temp);
             }
 
@@ -202,6 +208,8 @@ public class Bishop extends Piece {
         if (taken)
             return 0;
 
+        int value;
+
         int tempX = 1;
         int tempY = 1;
         char current = '.';
@@ -217,7 +225,8 @@ public class Bishop extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x-tempX,y-tempY);
-            Move temp = new Move(x, y, x-tempX, y-tempY, this, temp3);
+            value = getValue(myBoard[x-tempX][y-tempY]);
+            Move temp = new Move(x, y, x-tempX, y-tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -237,7 +246,8 @@ public class Bishop extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x-tempX,y+tempY);
-            Move temp = new Move(x, y, x-tempX, y+tempY, this, temp3);
+            value = getValue(myBoard[x-tempX][y+tempY]);
+            Move temp = new Move(x, y, x-tempX, y+tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -256,7 +266,8 @@ public class Bishop extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x+tempX,y+tempY);
-            Move temp = new Move(x, y, x+tempX, y+tempY, this, temp3);
+            value = getValue(myBoard[x+tempX][y+tempY]);
+            Move temp = new Move(x, y, x+tempX, y+tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -275,7 +286,8 @@ public class Bishop extends Piece {
             tempY--;
 
             Piece temp3 = opponent.takenPiece(x+tempX,y-tempY);
-            Move temp = new Move(x, y, x+tempX, y-tempY, this, temp3);
+            value = getValue(myBoard[x+tempX][y-tempY]);
+            Move temp = new Move(x, y, x+tempX, y-tempY, this, temp3, value);
             myMoves.add(temp);
         }
 
@@ -284,22 +296,22 @@ public class Bishop extends Piece {
          */
 
         if (x - 1 >= 0 && myBoard[x - 1][y] == '.') {//Can move up
-            Move temp = new Move(x, y, x - 1, y, this, null);
+            Move temp = new Move(x, y, x - 1, y, this, null, 0);
             myMoves.add(temp);
         }
 
         if (y + 1 < columns && myBoard[x][y+1] == '.') {//Can move right
-            Move temp = new Move(x, y, x, y+1, this, null);
+            Move temp = new Move(x, y, x, y+1, this, null, 0);
             myMoves.add(temp);
         }
 
         if (x +1 < rows && myBoard[x + 1][y] == '.') {//Can move down
-            Move temp = new Move(x, y, x + 1, y, this, null);
+            Move temp = new Move(x, y, x + 1, y, this, null, 0);
             myMoves.add(temp);
         }
 
         if (y - 1 >= columns && myBoard[x][y-1] == '.') {//Can move left
-            Move temp = new Move(x, y, x, y - 1, this, null);
+            Move temp = new Move(x, y, x, y - 1, this, null, 0);
             myMoves.add(temp);
         }
 
@@ -310,7 +322,7 @@ public class Bishop extends Piece {
             current = myBoard[x - tempX][y - tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x-tempX, y-tempY, this, null);
+                Move temp = new Move(x, y, x-tempX, y-tempY, this, null, 0);
                 myMoves.add(temp);
             }
 
@@ -329,7 +341,7 @@ public class Bishop extends Piece {
             current = myBoard[x - tempX][y+tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x-tempX, y+tempY, this, null);
+                Move temp = new Move(x, y, x-tempX, y+tempY, this, null, 0);
                 myMoves.add(temp);
             }
 
@@ -347,7 +359,7 @@ public class Bishop extends Piece {
             current = myBoard[x + tempX][y+tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x+tempX, y+tempY, this, null);
+                Move temp = new Move(x, y, x+tempX, y+tempY, this, null, 0);
                 myMoves.add(temp);
             }
 
@@ -365,7 +377,7 @@ public class Bishop extends Piece {
             current = myBoard[x + tempX][y-tempY];
 
             if (current == '.') {
-                Move temp = new Move(x, y, x+tempX, y-tempY, this, null);
+                Move temp = new Move(x, y, x+tempX, y-tempY, this, null, 0);
                 myMoves.add(temp);
             }
 

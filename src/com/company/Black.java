@@ -126,6 +126,8 @@ public class Black extends Player {
         for (int x = 0; x < numPieces; x++) {
             pieces.get(x).checkMoves(board, opponent, myMoves);
         }
+
+        Collections.sort(myMoves);
 /*
         for (int x = 0; x < myMoves.size(); x++) {
             myMoves.get(x).display();
