@@ -7,9 +7,12 @@ import java.util.List;
 abstract class Player {
     protected static final int rows = 6;
     protected static final int columns = 5;
-    protected static final int depth = 8;
+    //protected static final long cap = 2500;
+    protected static int depth;
     protected static final int MAX = 41;
 
+    protected long cap;
+    protected long totalTime;
     protected int numPieces;
     protected int moveCount;
     protected List<Piece> pieces;
@@ -21,8 +24,12 @@ abstract class Player {
     public Player(int startMoves) {
         moveCount = startMoves;
         checkMate = false;
+      //  totalTime = 300000;
+        totalTime = 300000;
     };
 
+    public void correctTime(long toAdd) {totalTime+= toAdd;}
+    public void subtractTime(long toSubtract) {totalTime-= toSubtract;}
     public void incrementMoves() {moveCount++;}
     public void decrementMoves() {moveCount--;}
 

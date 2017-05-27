@@ -46,10 +46,29 @@ public class White extends Player {
             return 0;
         }
 
+        //depth = 6;
         int [] choice = new int[4];
+        int [] choice2 = new int[4];
 
-        //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHH");
-        int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000);
+
+        long currentTime = System.currentTimeMillis();
+        //cap = totalTime / (MAX - moveCount);
+        cap = 2500;
+
+        for (int x = 1; x < MAX - moveCount; x++) {
+            depth = x;
+            int negVal = -chooseMove(board, choice2, opponent, depth, -200000, 200000, currentTime);
+            if (negVal == -100000)
+                break;
+
+            if (choice2[0] == -1)
+                break;
+            for (int z = 0; z < 4; z++) {
+                choice[z] = choice2[z];
+            }
+            if (negVal == 100000)
+                break;
+        }
 
         //System.out.printf("%d%d-%d%d\n", choice[0], choice[1], choice[2], choice[3]);
         //displayBoard(board);
@@ -111,27 +130,6 @@ public class White extends Player {
         this.displayBoard(board);
 
         System.out.printf("%c%c-%c%c\n", two, one, four, three);
-        /*
-        System.out.println();
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        System.out.println("_________________________________________________________");
-        */
 
         if (temp == 'k') {
             System.out.println("White wins!");
@@ -142,35 +140,8 @@ public class White extends Player {
 
         return 1;
     }
-/*
-    public int checkMovesWhite(char [][] board, int [] indices) {
-        int max = -10000; //Lowest value possible to indicate null move
-        int index = 0;
 
-        int []values = new int[numPieces];
-
-        for (int x = 0; x < numPieces; x++) {
-            values[x] = pieces.get(x).checkMoves(board, this);
-        }
-
-        //This algorithm orders the indices of the pieces to try first based on highest attack value to lowest
-        for (int x = 0; x < numPieces; x++) {
-            for (int y = 0; y < numPieces; y++) {
-                if (values[y] > max) {
-                    max = values[y];
-                    index = y;
-                }
-            }
-            indices[x] = index;
-            values[index] = -10000;
-            max = -10000;
-        }
-
-        return 1;
-    }
-    */
-
-    public int chooseMove(char [][] board, int [] choice, Black opponent, int depth, int alpha, int beta) {
+    public int chooseMove(char [][] board, int [] choice, Black opponent, int depth, int alpha, int beta, long oldTime) {
         if (depth == 0 || moveCount == MAX) {
             //System.out.printf("%d White value\n", this.evalPlayer() - opponent.evalPlayer());
             return -(this.evalPlayer() - opponent.evalPlayer());
@@ -201,18 +172,23 @@ public class White extends Player {
             addQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY(), 'Q');
 
         incrementMoves();
-        int negaMax = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha);
+        int negaMax = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha, oldTime);
         //System.out.printf("%d value\n", negaMax);
         decrementMoves();
+
+        if (myMoves.get(0).undoMove(board))
+            removeQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY());
+
+        if (System.currentTimeMillis() > oldTime + cap) {
+            choice[0] = -1;
+            return 1;
+        }
 
         if (depth == this.depth) {
             myMoves.get(0).setChoice(choice);
             //System.out.printf("Setting at depth %d of value %d\n", depth, negaMax);
             //System.out.printf("%d%d %d%d found\n", choice[0], choice[1], choice[2], choice[3]);
         }
-
-        if (myMoves.get(0).undoMove(board))
-            removeQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY());
 
         if (negaMax > beta) {
             return -negaMax;
@@ -246,12 +222,17 @@ public class White extends Player {
                 addQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY(), 'Q');
 
             incrementMoves();
-            temp = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha);
+            temp = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha, oldTime);
             //System.out.printf("%d value\n", temp);
             decrementMoves();
 
             if (myMoves.get(x).undoMove(board))
                 removeQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY());
+
+            if (System.currentTimeMillis() > oldTime + cap) {
+                choice[0] = -1;
+                return 1;
+            }
 
             if (temp >= beta) {
                 return -temp;

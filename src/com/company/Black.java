@@ -114,7 +114,7 @@ public class Black extends Player {
     }
     */
 
-    public int chooseMove(char [][] board, int [] choice, White opponent, int depth, int alpha, int beta) {
+    public int chooseMove(char [][] board, int [] choice, White opponent, int depth, int alpha, int beta, long oldTime) {
         if (depth == 0 || moveCount == MAX) {
             //System.out.printf("%d Black value\n", this.evalPlayer() - opponent.evalPlayer());
             return -(this.evalPlayer() - opponent.evalPlayer());
@@ -148,12 +148,17 @@ public class Black extends Player {
             addQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY(), 'q');
 
         incrementMoves();
-        int negaMax = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha);
+        int negaMax = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha, oldTime);
        // System.out.printf("%d Black value\n", negaMax);
         decrementMoves();
 
         if (myMoves.get(0).undoMove(board))
             removeQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY());
+
+        if (System.currentTimeMillis() > oldTime + cap) {
+            choice[0] = -1;
+            return 1;
+        }
 
         if (depth == this.depth)
             myMoves.get(0).setChoice(choice);
@@ -183,12 +188,17 @@ public class Black extends Player {
                 addQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY(), 'q');
 
             incrementMoves();
-            temp = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha);
+            temp = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha, oldTime);
             //System.out.printf("%d Black value\n", temp);
             decrementMoves();
 
             if (myMoves.get(x).undoMove(board))
                 removeQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY());
+
+            if (System.currentTimeMillis() > oldTime + cap) {
+                choice[0] = -1;
+                return 1;
+            }
 
             if (temp >= beta) {
                 return -temp;

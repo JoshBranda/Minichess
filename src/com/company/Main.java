@@ -142,29 +142,37 @@ public class Main {
 
         Client myClient = new Client("imcs.svcs.cs.pdx.edu","3589","lizardSpock","minichess1");
 
+        long elapsed, start;
 
         //myClient.offer('W');
-        myClient.accept("17259",'W');
+        myClient.accept("17375",'W');
+
+        start = System.currentTimeMillis();
 
         while (true) {
             char []myChoice = new char[5];
 
             int x = myWhite.makeMove(toCopy, myBlack, myChoice);
 
+            if (x == 0)
+                break;
 
             String choice = new String(myChoice);
 
-
-            //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             myClient.sendMove(choice);
 
-            if (x == 0)
-                break;
+            elapsed = start - System.currentTimeMillis();
+            //myWhite.subtractTime(elapsed);
+
+            start = System.currentTimeMillis();
 
             row = myClient.getMove();
 
             if (row == null)
                 break;
+
+            //myWhite.correctTime(System.currentTimeMillis() - start);
+            start = System.currentTimeMillis();
 
             for (int z = 0; z < 5; z++) {
                 myArray[z] = row.charAt(z);
