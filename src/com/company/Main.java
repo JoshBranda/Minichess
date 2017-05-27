@@ -145,7 +145,7 @@ public class Main {
         long elapsed, start;
 
         //myClient.offer('W');
-        myClient.accept("17375",'W');
+        myClient.accept("17407",'W');
 
         start = System.currentTimeMillis();
 
@@ -162,9 +162,9 @@ public class Main {
             myClient.sendMove(choice);
 
             elapsed = start - System.currentTimeMillis();
-            //myWhite.subtractTime(elapsed);
+            myWhite.subtractTime(elapsed);
 
-            start = System.currentTimeMillis();
+            //start = System.currentTimeMillis();
 
             row = myClient.getMove();
 

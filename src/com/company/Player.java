@@ -24,11 +24,10 @@ abstract class Player {
     public Player(int startMoves) {
         moveCount = startMoves;
         checkMate = false;
-      //  totalTime = 300000;
         totalTime = 300000;
     };
 
-    public void correctTime(long toAdd) {totalTime+= toAdd;}
+    public void setCap(long toSet) {cap = toSet;}
     public void subtractTime(long toSubtract) {totalTime-= toSubtract;}
     public void incrementMoves() {moveCount++;}
     public void decrementMoves() {moveCount--;}

@@ -49,25 +49,35 @@ public class White extends Player {
         //depth = 6;
         int [] choice = new int[4];
         int [] choice2 = new int[4];
-
-
         long currentTime = System.currentTimeMillis();
-        //cap = totalTime / (MAX - moveCount);
-        cap = 2500;
 
-        for (int x = 1; x < MAX - moveCount; x++) {
-            depth = x;
-            int negVal = -chooseMove(board, choice2, opponent, depth, -200000, 200000, currentTime);
-            if (negVal == -100000)
-                break;
+        if (moveCount > 3) {
 
-            if (choice2[0] == -1)
-                break;
-            for (int z = 0; z < 4; z++) {
-                choice[z] = choice2[z];
+            cap = totalTime / (MAX - moveCount);
+            //cap = 2500;
+            opponent.setCap(this.cap);
+
+            for (int x = 1; x < MAX - moveCount; x++) {
+                depth = x;
+                int negVal = -chooseMove(board, choice2, opponent, depth, -200000, 200000, currentTime);
+                if (negVal == -100000)
+                    break;
+
+                if (choice2[0] == -1)
+                    break;
+                for (int z = 0; z < 4; z++) {
+                    choice[z] = choice2[z];
+                }
+                if (negVal == 100000)
+                    break;
             }
-            if (negVal == 100000)
-                break;
+        }
+
+        else {
+            depth = moveCount * 2;
+            cap = 300000;
+            opponent.setCap(this.cap);
+            int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
         }
 
         //System.out.printf("%d%d-%d%d\n", choice[0], choice[1], choice[2], choice[3]);
