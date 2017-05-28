@@ -2,6 +2,7 @@ package com.company;
 /**
  * Created by joshuasander on 4/28/17.
  */
+import java.util.HashMap;
 import java.util.List;
 
 abstract class Player {
@@ -16,15 +17,21 @@ abstract class Player {
     protected int numPieces;
     protected int moveCount;
     protected List<Piece> pieces;
+    protected int color;
 
     protected boolean checkMate;
 
+    protected HashTable myTable;
+    protected Zobrist myZobrist;
+
     public Player() {};
 
-    public Player(int startMoves) {
+    public Player(int startMoves, HashTable toTable, Zobrist toZob) {
         moveCount = startMoves;
         checkMate = false;
         totalTime = 300000;
+        myTable = toTable;
+        myZobrist = toZob;
     };
 
     public void setCap(long toSet) {cap = toSet;}
@@ -117,5 +124,12 @@ abstract class Player {
 
     void setCheck(boolean toSet) {checkMate = toSet;};
     void setPromote(boolean toSet) {checkMate = toSet;};
+
+    public void calculateZobrist(Zobrist myZobrist) {
+        for (Piece piece: pieces) {
+            piece.calZob(color, myZobrist);
+        }
+    }
+
 }
 

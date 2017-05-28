@@ -8,6 +8,7 @@ public class King extends Piece {
         super(toX, toY);
         value = 10000;
         this.color = color;
+        type = 5;
     }
 
     public char getChar() {

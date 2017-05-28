@@ -5,8 +5,8 @@ import java.util.*;
  * Created by joshuasander on 4/28/17.
  */
 public class Black extends Player {
-    public Black(char [][] board, int startMoves) {
-        super(startMoves);
+    public Black(char [][] board, int startMoves, HashTable toHash, Zobrist toZob) {
+        super(startMoves, toHash, toZob);
 
         pieces = new ArrayList();
 
@@ -38,6 +38,7 @@ public class Black extends Player {
         }
 
         numPieces = pieces.size();
+        color = 1;
     }
 /*
     public int makeMove(char [][] board, White opponent, char []toCopy) {
@@ -120,7 +121,7 @@ public class Black extends Player {
             return -(this.evalPlayer() - opponent.evalPlayer());
         }
 
-        int temp;
+        int temp, negaMax;
         List<Move> myMoves = new ArrayList();
 
         for (int x = 0; x < numPieces; x++) {
@@ -147,10 +148,23 @@ public class Black extends Player {
         if (z == 1)
             addQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY(), 'q');
 
-        incrementMoves();
-        int negaMax = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha, oldTime);
-       // System.out.printf("%d Black value\n", negaMax);
-        decrementMoves();
+        int indx = myZobrist.getZobristHash(opponent, this, false);
+
+        if (myTable.myTable[indx] == null || myTable.myTable[indx].depth < depth || myTable.myTable[indx].player != color) {
+            incrementMoves();
+            negaMax = opponent.chooseMove(board, choice, this, depth - 1, -beta, -alpha, oldTime);
+            // System.out.printf("%d Black value\n", negaMax);
+            decrementMoves();
+
+            if (myTable.myTable[indx] == null)
+                myTable.myTable[indx] = new PosnValue(negaMax, myMoves.get(0).oldX, myMoves.get(0).oldY, myMoves.get(0).newX, myMoves.get(0).newY, alpha, beta, depth, color);
+            else
+                myTable.myTable[indx].setVal(negaMax, myMoves.get(0).oldX, myMoves.get(0).oldY, myMoves.get(0).newX, myMoves.get(0).newY, alpha, beta, depth, color);
+
+        }
+        else {
+            negaMax = myTable.myTable[indx].myValue;
+        }
 
         if (myMoves.get(0).undoMove(board))
             removeQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY());
@@ -187,10 +201,23 @@ public class Black extends Player {
             if (z == 1)
                 addQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY(), 'q');
 
-            incrementMoves();
-            temp = opponent.chooseMove(board, choice, this, depth-1, -beta, -alpha, oldTime);
-            //System.out.printf("%d Black value\n", temp);
-            decrementMoves();
+            indx = myZobrist.getZobristHash(opponent, this, false);
+
+            if (myTable.myTable[indx] == null || myTable.myTable[indx].depth < depth || myTable.myTable[indx].player != color) {
+                incrementMoves();
+                temp = opponent.chooseMove(board, choice, this, depth - 1, -beta, -alpha, oldTime);
+                //System.out.printf("%d Black value\n", temp);
+                decrementMoves();
+
+                if (myTable.myTable[indx] == null)
+                  myTable.myTable[indx] = new PosnValue(negaMax, myMoves.get(x).oldX, myMoves.get(x).oldY, myMoves.get(x).newX, myMoves.get(x).newY, alpha, beta, depth, color);
+                else
+                  myTable.myTable[indx].setVal(negaMax, myMoves.get(x).oldX, myMoves.get(x).oldY, myMoves.get(x).newX, myMoves.get(x).newY, alpha, beta, depth, color);
+            }
+
+            else {
+                temp = myTable.myTable[indx].myValue;
+            }
 
             if (myMoves.get(x).undoMove(board))
                 removeQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY());

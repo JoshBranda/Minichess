@@ -12,6 +12,7 @@ public class Pawn extends Piece {
         super(toX, toY);
         value = 100;
         this.color = color;
+        type = 0;
     };
 
     public char getChar() {

@@ -3,7 +3,7 @@ package com.company;
  * Created by joshuasander on 4/29/17.
  */
 public class Move implements Comparable<Move>{
-    private int oldX, oldY, newX, newY;
+    public int oldX, oldY, newX, newY;
     private char takenPiece, attackPiece;
     private boolean promotion;
     private Piece myPiece;

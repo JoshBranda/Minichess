@@ -12,6 +12,7 @@ public class Main {
         List<String> board = new ArrayList<String>();
         String row;
         int rows, columns;
+        long elapsed, start;
 
         Scanner input = new Scanner(System.in);
 
@@ -67,14 +68,17 @@ public class Main {
         toCopy[5][4] = 'K';
 
 
-        White myWhite = new White(toCopy, 1);
-        Black myBlack = new Black(toCopy, 1);
+        HashTable myHash = new HashTable();
+        Zobrist myZob = new Zobrist();
+        White myWhite = new White(toCopy, 1, myHash, myZob);
+        Black myBlack = new Black(toCopy, 1, myHash, myZob);
 
         //Play against me
 
-        /*
         char []myChoice = new char[5];
         char []myArray = new char[5];
+
+        start = System.currentTimeMillis();
 
         while (true) {
             int x = myWhite.makeMove(toCopy, myBlack, myChoice);
@@ -82,12 +86,17 @@ public class Main {
             if (x == 0)
                 break;
 
+            elapsed = start - System.currentTimeMillis();
+            myWhite.subtractTime(elapsed);
+
             System.out.println("Your move");
 
             row = input.nextLine();
 
             if (row == null)
                 break;
+
+            start = System.currentTimeMillis();
 
             for (int z = 0; z < 5; z++) {
                 myArray[z] = row.charAt(z);
@@ -136,16 +145,14 @@ public class Main {
             }
 
         }
-        */
+        /*
 
         char [] myArray = new char[5];
 
         Client myClient = new Client("imcs.svcs.cs.pdx.edu","3589","lizardSpock","minichess1");
 
-        long elapsed, start;
-
         //myClient.offer('W');
-        myClient.accept("17407",'W');
+        myClient.accept("17505",'W');
 
         start = System.currentTimeMillis();
 
@@ -213,6 +220,7 @@ public class Main {
             }
 
         }
+        */
 
         /*
         myClient.accept("13151" ,'B');
@@ -267,7 +275,7 @@ public class Main {
             myClient.sendMove(choice);
         }
         */
-        myClient.close();
+        //myClient.close();
 
     }
 }

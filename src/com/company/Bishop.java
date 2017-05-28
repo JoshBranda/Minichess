@@ -10,6 +10,7 @@ public class Bishop extends Piece {
         super(toX, toY);
         value = 300;
         this.color = color;
+        type = 2;
     }
 
     public char getChar() {

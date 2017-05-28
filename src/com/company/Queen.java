@@ -13,6 +13,7 @@ public class Queen extends Piece {
         super(toX, toY);
         value = 900;
         this.color = color;
+        type = 4;
     }
 
     ;

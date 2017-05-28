@@ -14,6 +14,7 @@ abstract class Piece {
     protected boolean cantMove;
     protected boolean win;
     protected char color;
+    protected int type;
 
     public static final int rows = 6;
     public static final int columns = 5;
@@ -34,6 +35,15 @@ abstract class Piece {
 
     public int getX(){return x;}
     public int getY(){return y;}
+    public int cal30(){return ( (x * 5) + y);}
+
+    public void calZob(int color, Zobrist myZob) {
+       if (taken)
+           return;
+
+       myZob.zobrist ^= myZob.zArray[color][type][((x * 5) + y)];
+
+    }
 
     public int getVal() {
         if (taken)

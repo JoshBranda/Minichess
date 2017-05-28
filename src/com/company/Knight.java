@@ -8,6 +8,7 @@ public class Knight extends Piece {
         super(toX, toY);
         value = 300;
         this.color = color;
+        type = 1;
     }
 
     public char getChar() {

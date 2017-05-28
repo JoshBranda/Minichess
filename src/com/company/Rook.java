@@ -10,6 +10,7 @@ public class Rook extends Piece {
         super(toX, toY);
         value = 500;
         this.color = color;
+        type = 3;
     }
 
     public char getChar() {
