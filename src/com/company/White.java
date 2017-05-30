@@ -47,11 +47,14 @@ public class White extends Player {
             return 0;
         }
 
-        //depth = 6;
         int [] choice = new int[4];
         int [] choice2 = new int[4];
         long currentTime = System.currentTimeMillis();
 
+        /*
+        depth = 6;
+        int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
+        */
         if (moveCount > 3) {
 
             cap = totalTime / (MAX - moveCount);
@@ -67,6 +70,7 @@ public class White extends Player {
                 if (choice2[0] == -1)
                     break;
                 for (int z = 0; z < 4; z++) {
+                    System.out.println("Setting");
                     choice[z] = choice2[z];
                 }
                 if (negVal == 100000)
@@ -81,11 +85,6 @@ public class White extends Player {
             int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
         }
 
-        //System.out.printf("%d%d-%d%d\n", choice[0], choice[1], choice[2], choice[3]);
-        //displayBoard(board);
-
-        //System.out.printf("%d%d-%d%d\n", choice[0], choice[1], choice[2], choice[3]);
-
         char one = (char)(5 - choice[0] + 49); //Convert the coordinates into readable moves for display
         char two = (char)(choice[1] + 97);
         char three = (char)(5 - choice[2] + 49);
@@ -95,15 +94,8 @@ public class White extends Player {
 
         char temp = board[newX][newY];
 
-        /*
-        displayBoard(board);
-        displayPositions();
-
-        System.out.printf("%d%d\n", oldX, oldY);
-        */
 
         Piece myTemp = takenPiece(oldX, oldY);
-       // System.out.println(myTemp.getChar());
 
         if (Character.isLowerCase(board[newX][newY])) {
             opponent.removePiece(newX, newY);
@@ -135,9 +127,6 @@ public class White extends Player {
 
         this.updatePiece(oldX, oldY, newX, newY);
 
-       // displayPositions();
-       // opponent.displayPositions();
-
         this.displayBoard(board);
 
         System.out.printf("%c%c-%c%c\n", two, one, four, three);
@@ -154,7 +143,6 @@ public class White extends Player {
 
     public int chooseMove(char [][] board, int [] choice, Black opponent, int depth, int alpha, int beta, long oldTime) {
         if (depth == 0 || moveCount == MAX) {
-            //System.out.printf("%d White value\n", this.evalPlayer() - opponent.evalPlayer());
             return -(this.evalPlayer() - opponent.evalPlayer());
         }
 
@@ -167,11 +155,6 @@ public class White extends Player {
 
         Collections.sort(myMoves);
 
-        //displayPositions();
-        //System.out.println(depth);
-
-
-
         int z = myMoves.get(0).makeMove(board);
 
         if (z == -1) {
@@ -183,6 +166,13 @@ public class White extends Player {
 
         if (z == 1)
             addQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY(), 'Q');
+
+        /*
+        incrementMoves();
+        negaMax = opponent.chooseMove(board, choice, this, depth - 1, -beta, -alpha, oldTime);
+        //System.out.printf("%d value\n", negaMax);
+        decrementMoves();
+        */
 
         int indx = myZobrist.getZobristHash(this, opponent, true);
 
@@ -211,8 +201,6 @@ public class White extends Player {
 
         if (depth == this.depth) {
             myMoves.get(0).setChoice(choice);
-            //System.out.printf("Setting at depth %d of value %d\n", depth, negaMax);
-            //System.out.printf("%d%d %d%d found\n", choice[0], choice[1], choice[2], choice[3]);
         }
 
         if (negaMax > beta) {
@@ -221,15 +209,6 @@ public class White extends Player {
 
         if (negaMax > alpha)
             alpha = negaMax;
-
-
-        /*
-        System.out.print("White: ");
-        myMoves.get(0).displayLine();
-        System.out.printf(" Value: %d\n", negaMax);
-        */
-
-        //myMoves.get(0).setChoice(choice);
 
         int length = myMoves.size();
 
@@ -246,6 +225,13 @@ public class White extends Player {
 
             if (z == 1)
                 addQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY(), 'Q');
+
+            /*
+            incrementMoves();
+            temp = opponent.chooseMove(board, choice, this, depth - 1, -beta, -alpha, oldTime);
+            //System.out.printf("%d value\n", temp);
+            decrementMoves();
+            */
 
             indx = myZobrist.getZobristHash(this, opponent, true);
 
@@ -277,40 +263,16 @@ public class White extends Player {
                 return -temp;
             }
 
-            //System.out.printf("Current White:%d Negamax:%d\n", temp, negaMax);
             if (temp > negaMax) {
                 negaMax = temp;
                 if (depth == this.depth) {
-                    //System.out.printf("Setting at depth %d of value %d\n", depth, negaMax);
                     myMoves.get(x).setChoice(choice);
-                   //System.out.printf("%d%d %d%d updated\n", choice[0], choice[1], choice[2], choice[3]);
                 }
             }
 
             if (temp > alpha)
                 alpha = temp;
-            /*
-            System.out.print("White: ");
-            myMoves.get(x).displayLine();
-            System.out.printf(" Value: %d\n", temp);
-            */
-
-            //System.out.printf("New Negamax:%d\n", negaMax);
-
-            //displayBoard(board);
-            //displayPositions();
-            //System.out.println(depth);
         }
-        /*
-        if (depth == this.depth)
-        System.out.printf("\nChoice is %d%d to %d%d\n",choice[0],choice[1],choice[2],choice[3]);
-
-        displayBoard(board);
-        System.out.println();
-        */
-        //displayPositions();
-
-        //System.out.printf("%d Highest value white\n", negaMax);
         return -negaMax;
     }
 

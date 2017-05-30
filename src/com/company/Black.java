@@ -148,6 +148,13 @@ public class Black extends Player {
         if (z == 1)
             addQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY(), 'q');
 
+        /*
+        incrementMoves();
+        negaMax = opponent.chooseMove(board, choice, this, depth - 1, -beta, -alpha, oldTime);
+        // System.out.printf("%d Black value\n", negaMax);
+        decrementMoves();
+        */
+
         int indx = myZobrist.getZobristHash(opponent, this, false);
 
         if (myTable.myTable[indx] == null || myTable.myTable[indx].depth < depth || myTable.myTable[indx].player != color) {
@@ -200,6 +207,13 @@ public class Black extends Player {
 
             if (z == 1)
                 addQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY(), 'q');
+
+            /*
+            incrementMoves();
+            temp = opponent.chooseMove(board, choice, this, depth - 1, -beta, -alpha, oldTime);
+            //System.out.printf("%d Black value\n", temp);
+            decrementMoves();
+            */
 
             indx = myZobrist.getZobristHash(opponent, this, false);
 

@@ -74,6 +74,7 @@ public class Main {
         Black myBlack = new Black(toCopy, 1, myHash, myZob);
 
         //Play against me
+        /*
 
         char []myChoice = new char[5];
         char []myArray = new char[5];
@@ -145,14 +146,14 @@ public class Main {
             }
 
         }
-        /*
+        */
 
         char [] myArray = new char[5];
 
         Client myClient = new Client("imcs.svcs.cs.pdx.edu","3589","lizardSpock","minichess1");
 
         //myClient.offer('W');
-        myClient.accept("17505",'W');
+        myClient.accept("17668",'W');
 
         start = System.currentTimeMillis();
 
@@ -220,7 +221,6 @@ public class Main {
             }
 
         }
-        */
 
         /*
         myClient.accept("13151" ,'B');
@@ -275,7 +275,7 @@ public class Main {
             myClient.sendMove(choice);
         }
         */
-        //myClient.close();
+        myClient.close();
 
     }
 }

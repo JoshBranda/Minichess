@@ -41,7 +41,7 @@ public class Pawn extends Piece {
 
         if (x - 1 >= 0 && myBoard[x - 1][y] == '.') {//Can move forward
             if (x - 1 == 0) {
-                Move temp = new Move(x, y, x + 1, y, this, null, 800);
+                Move temp = new Move(x, y, x - 1, y, this, null, 800);
                 myMoves.add(temp);
             }
             else {

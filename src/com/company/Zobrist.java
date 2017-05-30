@@ -47,6 +47,8 @@ public class Zobrist {
 
         zobrist = zobrist % hashVal;
 
+        //System.out.println(zobrist);
+
         return (int)zobrist;
 
     }
