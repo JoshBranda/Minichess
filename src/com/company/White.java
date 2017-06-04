@@ -55,7 +55,8 @@ public class White extends Player {
         depth = 6;
         int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
         */
-        if (moveCount > 3) {
+        /*
+        if (moveCount > 2) {
 
             cap = totalTime / (MAX - moveCount);
             //cap = 2500;
@@ -70,7 +71,6 @@ public class White extends Player {
                 if (choice2[0] == -1)
                     break;
                 for (int z = 0; z < 4; z++) {
-                    System.out.println("Setting");
                     choice[z] = choice2[z];
                 }
                 if (negVal == 100000)
@@ -79,11 +79,18 @@ public class White extends Player {
         }
 
         else {
+
             depth = moveCount * 2;
             cap = 300000;
             opponent.setCap(this.cap);
             int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
         }
+        */
+
+        depth = 8;
+        cap = 300000;
+        opponent.setCap(this.cap);
+        int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
 
         char one = (char)(5 - choice[0] + 49); //Convert the coordinates into readable moves for display
         char two = (char)(choice[1] + 97);

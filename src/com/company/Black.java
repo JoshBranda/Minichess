@@ -40,39 +40,83 @@ public class Black extends Player {
         numPieces = pieces.size();
         color = 1;
     }
-/*
-    public int makeMove(char [][] board, White opponent, char []toCopy) {
+
+    public int makeMove(char [][] board, White opponent, char[] toCopy) {
         if (moveCount == MAX) {
             System.out.println("DRAW!!!");
             return 0;
         }
 
-        int [] choice = new int[4];
+        int[] choice = new int[4];
+        int[] choice2 = new int[4];
+        long currentTime = System.currentTimeMillis();
 
-        int negVal = -chooseMove(board, choice, opponent, depth);
+        /*
+        depth = 6;
+        int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
+        */
+        /*
+        if (moveCount > 2) {
 
-        char one = (char)(5 - choice[0] + 49); //Convert the coordinates into readable moves for display
-        char two = (char)(choice[1] + 97);
-        char three = (char)(5 - choice[2] + 49);
-        char four = (char)(choice[3] + 97);
+            cap = totalTime / (MAX - moveCount);
+            //cap = 2500;
+            opponent.setCap(this.cap);
+
+            for (int x = 1; x < MAX - moveCount; x++) {
+                depth = x;
+                int negVal = -chooseMove(board, choice2, opponent, depth, -200000, 200000, currentTime);
+                if (negVal == -100000)
+                    break;
+
+                if (choice2[0] == -1)
+                    break;
+                for (int z = 0; z < 4; z++) {
+                    choice[z] = choice2[z];
+                }
+                if (negVal == 100000)
+                    break;
+            }
+        } else {
+            depth = moveCount * 2;
+            cap = 300000;
+            opponent.setCap(this.cap);
+            int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
+        }
+        */
+
+        depth = 8;
+        cap = 300000;
+        opponent.setCap(this.cap);
+        int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
+
+        char one = (char) (5 - choice[0] + 49); //Convert the coordinates into readable moves for display
+        char two = (char) (choice[1] + 97);
+        char three = (char) (5 - choice[2] + 49);
+        char four = (char) (choice[3] + 97);
 
         int oldX = choice[0], oldY = choice[1], newX = choice[2], newY = choice[3];
 
         char temp = board[newX][newY];
 
-        Move temp2 = new Move(oldX, oldY, newX, newY);
 
-        if (temp2.setBoard(board, board[oldX][oldY])) { //Check for promotion
-            this.addQueen(newX, newY, 'q'); //Add queen to list if promotion applies
-            this.removePiece(oldX, oldY);
-        }
-        else
-            this.updatePiece(oldX, oldY, newX, newY);
-        //board[newX][newY] = board[oldX][oldY];
-        //board[oldX][oldY] = '.';
+        Piece myTemp = takenPiece(oldX, oldY);
 
-        if (Character.isUpperCase(temp)) {
+        if (Character.isUpperCase(board[newX][newY])) {
             opponent.removePiece(newX, newY);
+        }
+
+        int index;
+
+        if (newX == 0 && myTemp.getChar() == 'p') {
+            board[newX][newY] = 'q';
+            board[oldX][oldY] = '.';
+            index = retIndex(oldX, oldY);
+            pieces.remove(index);
+            pieces.add(new Queen(newX, newY, 'q'));
+        } else {
+            board[newX][newY] = myTemp.getChar();
+            board[oldX][oldY] = '.';
+            myTemp.setXY(newX, newY);
         }
 
         toCopy[0] = two;
@@ -83,41 +127,25 @@ public class Black extends Player {
 
         incrementMoves();
 
-        return 1;
-    }
+        this.updatePiece(oldX, oldY, newX, newY);
 
+        //System.out.printf("\n%d    B\n", moveCount);
+        //this.displayBoard(board);
 
-    /*
-    public int checkMovesBlack(char [][] board, int [] indices) {
-        int max = -10000; //Lowest value possible to indicate null move
-        int index = 0;
+        System.out.printf("%c%c-%c%c\n", two, one, four, three);
 
-        int []values = new int[numPieces];
-
-        for (int x = 0; x < numPieces; x++) {
-            values[x] = pieces.get(x).checkMoves(board, this);
+        if (temp == 'K') {
+            System.out.println("Black wins!");
+            return 0;
         }
 
-        //This algorithm orders the indices of the pieces to try first based on highest attack value to lowest
-        for (int x = 0; x < numPieces; x++) {
-            for (int y = 0; y < numPieces; y++) {
-                if (values[y] > max) {
-                    max = values[y];
-                    index = y;
-                }
-            }
-            indices[x] = index;
-            values[index] = -10000;
-            max = -10000;
-        }
+        System.out.println();
 
         return 1;
     }
-    */
 
     public int chooseMove(char [][] board, int [] choice, White opponent, int depth, int alpha, int beta, long oldTime) {
         if (depth == 0 || moveCount == MAX) {
-            //System.out.printf("%d Black value\n", this.evalPlayer() - opponent.evalPlayer());
             return -(this.evalPlayer() - opponent.evalPlayer());
         }
 
@@ -129,21 +157,15 @@ public class Black extends Player {
         }
 
         Collections.sort(myMoves);
-/*
-        for (int x = 0; x < myMoves.size(); x++) {
-            myMoves.get(x).display();
-        }
-
-        if (myMoves.size() == 0) {
-            System.out.println("Here it is");
-            displayBoard(board);
-        }
-        */
 
         int z = myMoves.get(0).makeMove(board);
 
-        if (z == -1)
+        if (z == -1) {
+            if (depth == this.depth) {
+                myMoves.get(0).setChoice(choice);
+            }
             return -100000;
+        }
 
         if (z == 1)
             addQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY(), 'q');
@@ -202,8 +224,12 @@ public class Black extends Player {
 
             z = myMoves.get(x).makeMove(board);
 
-            if (z == -1)
+            if (z == -1) {
+                if (depth == this.depth) {
+                    myMoves.get(0).setChoice(choice);
+                }
                 return -100000;
+            }
 
             if (z == 1)
                 addQueen(myMoves.get(x).getNewX(), myMoves.get(x).getNewY(), 'q');

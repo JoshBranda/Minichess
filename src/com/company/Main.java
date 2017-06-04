@@ -16,28 +16,6 @@ public class Main {
 
         Scanner input = new Scanner(System.in);
 
-        /*
-        playerStart = input.next().charAt(0);
-        input.nextLine();
-
-        row = input.nextLine();
-
-        while (!row.isEmpty()) {
-            board.add(row);
-            row = input.nextLine();
-        }
-
-
-        columns = board.get(0).length();
-        rows = board.size();
-
-        for (int x = 0; x < rows; x++) {
-            for (int y = 0; y < columns; y++) {
-                toCopy[x][y] = board.get(x).charAt(y);
-            }
-        }
-        */
-
         rows = 6;
         columns = 5;
         toCopy = new char[rows][columns];
@@ -73,209 +51,523 @@ public class Main {
         White myWhite = new White(toCopy, 1, myHash, myZob);
         Black myBlack = new Black(toCopy, 1, myHash, myZob);
 
-        //Play against me
-        /*
+        if (args.length < 1) {
 
-        char []myChoice = new char[5];
-        char []myArray = new char[5];
+            //Play against me
 
-        start = System.currentTimeMillis();
-
-        while (true) {
-            int x = myWhite.makeMove(toCopy, myBlack, myChoice);
-
-            if (x == 0)
-                break;
-
-            elapsed = start - System.currentTimeMillis();
-            myWhite.subtractTime(elapsed);
-
-            System.out.println("Your move");
-
-            row = input.nextLine();
-
-            if (row == null)
-                break;
+            char[] myChoice = new char[5];
+            char[] myArray = new char[5];
 
             start = System.currentTimeMillis();
 
-            for (int z = 0; z < 5; z++) {
-                myArray[z] = row.charAt(z);
+            while (true) {
+                int x = myWhite.makeMove(toCopy, myBlack, myChoice);
+
+                if (x == 0)
+                    break;
+
+                elapsed = start - System.currentTimeMillis();
+                myWhite.subtractTime(elapsed);
+
+                System.out.println("Your move");
+
+                row = input.nextLine();
+
+                if (row == null)
+                    break;
+
+                start = System.currentTimeMillis();
+
+                for (int z = 0; z < 5; z++) {
+                    myArray[z] = row.charAt(z);
+                }
+
+                int oldY = Character.getNumericValue(myArray[0]) - 10;
+                int oldX = 6 - Character.getNumericValue(myArray[1]);
+                int newY = Character.getNumericValue(myArray[3]) - 10;
+                int newX = 6 - Character.getNumericValue(myArray[4]);
+
+                char temp = toCopy[newX][newY];
+
+                System.out.println(temp);
+
+                Piece myTemp = myBlack.takenPiece(oldX, oldY);
+
+                if (Character.isUpperCase(toCopy[newX][newY])) {
+                    myWhite.removePiece(newX, newY);
+                }
+
+                int index;
+
+                if (newX == 5 && myTemp.getChar() == 'p') {
+                    toCopy[newX][newY] = 'q';
+                    toCopy[oldX][oldY] = '.';
+                    index = myBlack.retIndex(oldX, oldY);
+                    myBlack.pieces.remove(index);
+                    myBlack.pieces.add(new Queen(newX, newY, 'q'));
+                } else {
+                    toCopy[newX][newY] = myTemp.getChar();
+                    toCopy[oldX][oldY] = '.';
+                    myTemp.setXY(newX, newY);
+                }
+
+                // myWhite.displayPositions();
+                // myBlack.displayPositions();
+                myWhite.displayBoard(toCopy);
+                System.out.println();
+
+                //System.out.println("Test2");
+                if (temp == 'K') {
+                    System.out.println("Black wins!");
+                    break;
+                }
+
+                myBlack.incrementMoves();
+
             }
-
-            int oldY = Character.getNumericValue(myArray[0]) - 10;
-            int oldX = 6 - Character.getNumericValue(myArray[1]);
-            int newY = Character.getNumericValue(myArray[3]) - 10;
-            int newX = 6 - Character.getNumericValue(myArray[4]);
-
-            char temp = toCopy[newX][newY];
-
-            System.out.println(temp);
-
-            Piece myTemp = myBlack.takenPiece(oldX, oldY);
-
-            if (Character.isUpperCase(toCopy[newX][newY])) {
-                myWhite.removePiece(newX, newY);
-            }
-
-            int index;
-
-            if (newX == 5 && myTemp.getChar() == 'p') {
-                toCopy[newX][newY] = 'q';
-                toCopy[oldX][oldY] = '.';
-                index = myBlack.retIndex(oldX,oldY);
-                myBlack.pieces.remove(index);
-                myBlack.pieces.add(new Queen(newX, newY, 'q'));
-            }
-
-            else {
-                toCopy[newX][newY] = myTemp.getChar();
-                toCopy[oldX][oldY] = '.';
-                myTemp.setXY(newX, newY);
-            }
-
-           // myWhite.displayPositions();
-           // myBlack.displayPositions();
-            myWhite.displayBoard(toCopy);
-            System.out.println();
-
-            //System.out.println("Test2");
-            if (temp == 'K') {
-                System.out.println("Black wins!");
-                break;
-            }
-
         }
-        */
 
-        char [] myArray = new char[5];
+        else if (args.length < 3 && args[0].equals("offer")) {
+            char response;
+            char [] myArray = new char[5];
 
-        Client myClient = new Client("imcs.svcs.cs.pdx.edu","3589","lizardSpock","minichess1");
+            Client myClient = new Client("imcs.svcs.cs.pdx.edu","3589","lizardSpock","minichess1");
 
-        //myClient.offer('W');
-        myClient.accept("17668",'W');
+            response = args[1].charAt(0);
 
-        start = System.currentTimeMillis();
+            if (response == 'W')
+                myClient.offer('W');
 
-        while (true) {
-            char []myChoice = new char[5];
+            if (response == 'B')
+                myClient.offer('B');
 
-            int x = myWhite.makeMove(toCopy, myBlack, myChoice);
-
-            if (x == 0)
-                break;
-
-            String choice = new String(myChoice);
-
-            myClient.sendMove(choice);
-
-            elapsed = start - System.currentTimeMillis();
-            myWhite.subtractTime(elapsed);
-
-            //start = System.currentTimeMillis();
-
-            row = myClient.getMove();
-
-            if (row == null)
-                break;
-
-            //myWhite.correctTime(System.currentTimeMillis() - start);
-            start = System.currentTimeMillis();
-
-            for (int z = 0; z < 5; z++) {
-                myArray[z] = row.charAt(z);
+            if (args[1].equals("?")) {
+                response = myClient.offer('?');
             }
 
-            int oldY = Character.getNumericValue(myArray[0]) - 10;
-            int oldX = 6 - Character.getNumericValue(myArray[1]);
-            int newY = Character.getNumericValue(myArray[3]) - 10;
-            int newX = 6 - Character.getNumericValue(myArray[4]);
 
-            char temp = toCopy[newX][newY];
+            //Computer begins playing game as white
 
-            Piece myTemp = myBlack.takenPiece(oldX, oldY);
+            if (response == 'W') {
 
-            if (Character.isUpperCase(toCopy[newX][newY])) {
-                myWhite.removePiece(newX, newY);
+                start = System.currentTimeMillis();
+
+                while (true) {
+                    char[] myChoice = new char[5];
+
+                    int x = myWhite.makeMove(toCopy, myBlack, myChoice);
+
+                    if (x == 0)
+                        break;
+
+                    String choice = new String(myChoice);
+
+                    myClient.sendMove(choice);
+
+                    elapsed = start - System.currentTimeMillis();
+                    myWhite.subtractTime(elapsed);
+
+                    //start = System.currentTimeMillis();
+
+                    row = myClient.getMove();
+
+                    if (row == null)
+                        break;
+
+                    //myWhite.correctTime(System.currentTimeMillis() - start);
+                    start = System.currentTimeMillis();
+
+                    for (int z = 0; z < 5; z++) {
+                        myArray[z] = row.charAt(z);
+                    }
+
+                    int oldY = Character.getNumericValue(myArray[0]) - 10;
+                    int oldX = 6 - Character.getNumericValue(myArray[1]);
+                    int newY = Character.getNumericValue(myArray[3]) - 10;
+                    int newX = 6 - Character.getNumericValue(myArray[4]);
+
+                    char temp = toCopy[newX][newY];
+
+                    Piece myTemp = myBlack.takenPiece(oldX, oldY);
+
+                    if (Character.isUpperCase(toCopy[newX][newY])) {
+                        myWhite.removePiece(newX, newY);
+                    }
+
+                    int index;
+
+                    if (newX == 5 && myTemp.getChar() == 'p') {
+                        toCopy[newX][newY] = 'q';
+                        toCopy[oldX][oldY] = '.';
+                        index = myBlack.retIndex(oldX, oldY);
+                        myBlack.pieces.remove(index);
+                        myBlack.pieces.add(new Queen(newX, newY, 'q'));
+                    } else {
+                        toCopy[newX][newY] = myTemp.getChar();
+                        toCopy[oldX][oldY] = '.';
+                        myTemp.setXY(newX, newY);
+                    }
+
+                    if (temp == 'K') {
+                        System.out.println("Black wins!");
+                        break;
+                    }
+                    myBlack.incrementMoves();
+                }
             }
 
-            int index;
+            if (response == 'B') {
 
-            if (newX == 5 && myTemp.getChar() == 'p') {
-                toCopy[newX][newY] = 'q';
-                toCopy[oldX][oldY] = '.';
-                index = myBlack.retIndex(oldX,oldY);
-                myBlack.pieces.remove(index);
-                myBlack.pieces.add(new Queen(newX, newY, 'q'));
+                while (true) {
+                    row = myClient.getMove();
+
+                    if (row == null)
+                        break;
+
+                    start = System.currentTimeMillis();
+
+                    myWhite.incrementMoves();
+
+                    for (int z = 0; z < 5; z++) {
+                        myArray[z] = row.charAt(z);
+                    }
+
+                    int oldY = Character.getNumericValue(myArray[0]) - 10;
+                    int oldX = 6 - Character.getNumericValue(myArray[1]);
+                    int newY = Character.getNumericValue(myArray[3]) - 10;
+                    int newX = 6 - Character.getNumericValue(myArray[4]);
+
+                    char temp = toCopy[newX][newY];
+
+                    Piece myTemp = myWhite.takenPiece(oldX, oldY);
+
+                    if (Character.isLowerCase(toCopy[newX][newY])) {
+                        myBlack.removePiece(newX, newY);
+                    }
+
+                    int index;
+
+                    if (newX == 0 && myTemp.getChar() == 'P') {
+                        toCopy[newX][newY] = 'Q';
+                        toCopy[oldX][oldY] = '.';
+                        index = myWhite.retIndex(oldX, oldY);
+                        myWhite.pieces.remove(index);
+                        myWhite.pieces.add(new Queen(newX, newY, 'Q'));
+                    } else {
+                        toCopy[newX][newY] = myTemp.getChar();
+                        toCopy[oldX][oldY] = '.';
+                        myTemp.setXY(newX, newY);
+                    }
+
+                    if (temp == 'k') {
+                        System.out.println("White wins!");
+                        break;
+                    }
+
+                    char[] myChoice = new char[5];
+
+                    int x = myBlack.makeMove(toCopy, myWhite, myChoice);
+
+                    if (x == 0)
+                        break;
+
+                    String choice = new String(myChoice);
+
+                    myClient.sendMove(choice);
+
+                    elapsed = start - System.currentTimeMillis();
+                    myBlack.subtractTime(elapsed);
+
+                    //start = System.currentTimeMillis();
+
+
+                    //myWhite.correctTime(System.currentTimeMillis() - start);
+                }
+
+            }
+            myClient.close();
+        }
+
+        else if (args.length < 3 && args[0].equals("accept")) {
+            char response;
+            char [] myArray = new char[5];
+
+            Client myClient = new Client("imcs.svcs.cs.pdx.edu","3589","lizardSpock","minichess1");
+
+            response = myClient.accept(args[1], '?');
+
+
+            //Computer begins playing game as white
+
+            if (response == 'W') {
+
+                start = System.currentTimeMillis();
+
+                while (true) {
+                    char[] myChoice = new char[5];
+
+                    int x = myWhite.makeMove(toCopy, myBlack, myChoice);
+
+                    if (x == 0)
+                        break;
+
+                    String choice = new String(myChoice);
+
+                    myClient.sendMove(choice);
+
+                    elapsed = start - System.currentTimeMillis();
+                    myWhite.subtractTime(elapsed);
+
+                    //start = System.currentTimeMillis();
+
+                    row = myClient.getMove();
+
+                    if (row == null)
+                        break;
+
+                    //myWhite.correctTime(System.currentTimeMillis() - start);
+                    start = System.currentTimeMillis();
+
+                    for (int z = 0; z < 5; z++) {
+                        myArray[z] = row.charAt(z);
+                    }
+
+                    int oldY = Character.getNumericValue(myArray[0]) - 10;
+                    int oldX = 6 - Character.getNumericValue(myArray[1]);
+                    int newY = Character.getNumericValue(myArray[3]) - 10;
+                    int newX = 6 - Character.getNumericValue(myArray[4]);
+
+                    char temp = toCopy[newX][newY];
+
+                    Piece myTemp = myBlack.takenPiece(oldX, oldY);
+
+                    if (Character.isUpperCase(toCopy[newX][newY])) {
+                        myWhite.removePiece(newX, newY);
+                    }
+
+                    int index;
+
+                    if (newX == 5 && myTemp.getChar() == 'p') {
+                        toCopy[newX][newY] = 'q';
+                        toCopy[oldX][oldY] = '.';
+                        index = myBlack.retIndex(oldX, oldY);
+                        myBlack.pieces.remove(index);
+                        myBlack.pieces.add(new Queen(newX, newY, 'q'));
+                    } else {
+                        toCopy[newX][newY] = myTemp.getChar();
+                        toCopy[oldX][oldY] = '.';
+                        myTemp.setXY(newX, newY);
+                    }
+
+                    if (temp == 'K') {
+                        System.out.println("Black wins!");
+                        break;
+                    }
+
+                    myBlack.incrementMoves();
+                }
             }
 
-            else {
-                toCopy[newX][newY] = myTemp.getChar();
-                toCopy[oldX][oldY] = '.';
-                myTemp.setXY(newX, newY);
-            }
+            if (response == 'B') {
 
-            if (temp == 'K') {
-                System.out.println("Black wins!");
-                break;
-            }
+                while (true) {
+                    row = myClient.getMove();
 
+                    if (row == null)
+                        break;
+
+                    start = System.currentTimeMillis();
+
+                    myWhite.incrementMoves();
+
+                    for (int z = 0; z < 5; z++) {
+                        myArray[z] = row.charAt(z);
+                    }
+
+                    int oldY = Character.getNumericValue(myArray[0]) - 10;
+                    int oldX = 6 - Character.getNumericValue(myArray[1]);
+                    int newY = Character.getNumericValue(myArray[3]) - 10;
+                    int newX = 6 - Character.getNumericValue(myArray[4]);
+
+                    char temp = toCopy[newX][newY];
+
+                    Piece myTemp = myWhite.takenPiece(oldX, oldY);
+
+                    if (Character.isLowerCase(toCopy[newX][newY])) {
+                        myBlack.removePiece(newX, newY);
+                    }
+
+                    int index;
+
+                    if (newX == 0 && myTemp.getChar() == 'P') {
+                        toCopy[newX][newY] = 'Q';
+                        toCopy[oldX][oldY] = '.';
+                        index = myWhite.retIndex(oldX, oldY);
+                        myWhite.pieces.remove(index);
+                        myWhite.pieces.add(new Queen(newX, newY, 'Q'));
+                    } else {
+                        toCopy[newX][newY] = myTemp.getChar();
+                        toCopy[oldX][oldY] = '.';
+                        myTemp.setXY(newX, newY);
+                    }
+
+                    if (temp == 'k') {
+                        System.out.println("White wins!");
+                        break;
+                    }
+
+                    char[] myChoice = new char[5];
+
+                    int x = myBlack.makeMove(toCopy, myWhite, myChoice);
+
+                    if (x == 0)
+                        break;
+
+                    String choice = new String(myChoice);
+
+                    myClient.sendMove(choice);
+
+                    elapsed = start - System.currentTimeMillis();
+                    myBlack.subtractTime(elapsed);
+                }
+            }
+            myClient.close();
         }
 
         /*
-        myClient.accept("13151" ,'B');
+        else if (args.length < 3){
+            char[] myArray = new char[5];
 
-        while (true) {
+            Client myClient = new Client("imcs.svcs.cs.pdx.edu", "3589", "lizardSpock", "minichess1");
 
+            //myClient.offer('W');
+            myClient.accept("17668", 'W');
 
-            row = myClient.getMove();
+            start = System.currentTimeMillis();
 
-            if (row == null)
-                break;
+            while (true) {
+                char[] myChoice = new char[5];
 
-            for (int z = 0; z < 5; z++) {
-                myArray[z] = row.charAt(z);
+                int x = myWhite.makeMove(toCopy, myBlack, myChoice);
+
+                if (x == 0)
+                    break;
+
+                String choice = new String(myChoice);
+
+                myClient.sendMove(choice);
+
+                elapsed = start - System.currentTimeMillis();
+                myWhite.subtractTime(elapsed);
+
+                //start = System.currentTimeMillis();
+
+                row = myClient.getMove();
+
+                if (row == null)
+                    break;
+
+                //myWhite.correctTime(System.currentTimeMillis() - start);
+                start = System.currentTimeMillis();
+
+                for (int z = 0; z < 5; z++) {
+                    myArray[z] = row.charAt(z);
+                }
+
+                int oldY = Character.getNumericValue(myArray[0]) - 10;
+                int oldX = 6 - Character.getNumericValue(myArray[1]);
+                int newY = Character.getNumericValue(myArray[3]) - 10;
+                int newX = 6 - Character.getNumericValue(myArray[4]);
+
+                char temp = toCopy[newX][newY];
+
+                Piece myTemp = myBlack.takenPiece(oldX, oldY);
+
+                if (Character.isUpperCase(toCopy[newX][newY])) {
+                    myWhite.removePiece(newX, newY);
+                }
+
+                int index;
+
+                if (newX == 5 && myTemp.getChar() == 'p') {
+                    toCopy[newX][newY] = 'q';
+                    toCopy[oldX][oldY] = '.';
+                    index = myBlack.retIndex(oldX, oldY);
+                    myBlack.pieces.remove(index);
+                    myBlack.pieces.add(new Queen(newX, newY, 'q'));
+                } else {
+                    toCopy[newX][newY] = myTemp.getChar();
+                    toCopy[oldX][oldY] = '.';
+                    myTemp.setXY(newX, newY);
+                }
+
+                if (temp == 'K') {
+                    System.out.println("Black wins!");
+                    break;
+                }
             }
+            myClient.close();
+        }
+/*
+        else if (args.length < 2 && args[1].equals("B")) {
+            char[] myArray = new char[5];
 
-            int oldY = Character.getNumericValue(myArray[0]) - 10;
-            int oldX = 6 - Character.getNumericValue(myArray[1]);
-            int newY = Character.getNumericValue(myArray[3]) - 10;
-            int newX = 6 - Character.getNumericValue(myArray[4]);
+            Client myClient = new Client("imcs.svcs.cs.pdx.edu", "3589", "lizardSpock", "minichess1");
 
-            char temp = toCopy[newX][newY];
+            myClient.accept("13151", 'B');
 
-            Move temp2 = new Move(oldX, oldY, newX, newY);
-            if (temp2.setBoard(toCopy, toCopy[oldX][oldY])) { //Check for promotion
-                myWhite.addQueen(newX, newY); //Add queen to list if promotion applies
-                myWhite.removePiece(oldX, oldY);
+            while (true) {
+
+
+                row = myClient.getMove();
+
+                if (row == null)
+                    break;
+
+                for (int z = 0; z < 5; z++) {
+                    myArray[z] = row.charAt(z);
+                }
+
+                int oldY = Character.getNumericValue(myArray[0]) - 10;
+                int oldX = 6 - Character.getNumericValue(myArray[1]);
+                int newY = Character.getNumericValue(myArray[3]) - 10;
+                int newX = 6 - Character.getNumericValue(myArray[4]);
+
+                char temp = toCopy[newX][newY];
+
+                Move temp2 = new Move(oldX, oldY, newX, newY);
+                if (temp2.setBoard(toCopy, toCopy[oldX][oldY])) { //Check for promotion
+                    myWhite.addQueen(newX, newY); //Add queen to list if promotion applies
+                    myWhite.removePiece(oldX, oldY);
+                } else {
+                    myWhite.printPiece(oldX, oldY);
+                    myWhite.updatePiece(oldX, oldY, newX, newY);
+                    myWhite.printPiece(newX, newY);
+                }
+
+                if (Character.isLowerCase(temp)) {
+                    myBlack.removePiece(newX, newY);
+                }
+
+                if (temp == 'k') {
+                    System.out.println("White wins!");
+                    break;
+                }
+
+                char[] myChoice = new char[5];
+
+                int x = myBlack.makeMove(toCopy, myWhite, myChoice);
+                if (x == 0)
+                    break;
+
+                String choice = new String(myChoice);
+
+                myClient.sendMove(choice);
+
             }
-            else {
-                myWhite.printPiece(oldX, oldY);
-                myWhite.updatePiece(oldX, oldY, newX, newY);
-                myWhite.printPiece(newX, newY);
-            }
-
-            if (Character.isLowerCase(temp)) {
-                myBlack.removePiece(newX, newY);
-            }
-
-            if (temp == 'k') {
-                System.out.println("White wins!");
-                break;
-            }
-
-            char []myChoice = new char[5];
-
-            int x = myBlack.makeMove(toCopy, myWhite, myChoice);
-            if (x == 0)
-                break;
-
-            String choice = new String(myChoice);
-
-            myClient.sendMove(choice);
+            myClient.close();
         }
         */
-        myClient.close();
 
     }
 }
