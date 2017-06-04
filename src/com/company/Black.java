@@ -5,7 +5,7 @@ import java.util.*;
  * Created by joshuasander on 4/28/17.
  */
 public class Black extends Player {
-    public Black(char [][] board, int startMoves, HashTable toHash, Zobrist toZob) {
+    public Black(char [][] board, int startMoves, HashMap<Long, PosnValue> toHash, Zobrist toZob) {
         super(startMoves, toHash, toZob);
 
         pieces = new ArrayList();
@@ -84,7 +84,7 @@ public class Black extends Player {
         }
         */
 
-        depth = 8;
+        depth = 10;
         cap = 300000;
         opponent.setCap(this.cap);
         int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
@@ -177,22 +177,25 @@ public class Black extends Player {
         decrementMoves();
         */
 
-        int indx = myZobrist.getZobristHash(opponent, this, false);
+        long indx = myZobrist.getZobristHash(opponent, this, false);
+        PosnValue tempPos = myTable.get(indx);
 
-        if (myTable.myTable[indx] == null || myTable.myTable[indx].depth < depth || myTable.myTable[indx].player != color) {
+        if (tempPos != null && ( (tempPos.alpha < tempPos.myValue && tempPos.myValue < tempPos.beta) || (tempPos.alpha <= alpha && beta <= tempPos.beta)) && tempPos.depth >= depth )
+            negaMax = tempPos.myValue;
+
+        else {
             incrementMoves();
             negaMax = opponent.chooseMove(board, choice, this, depth - 1, -beta, -alpha, oldTime);
-            // System.out.printf("%d Black value\n", negaMax);
             decrementMoves();
 
-            if (myTable.myTable[indx] == null)
-                myTable.myTable[indx] = new PosnValue(negaMax, myMoves.get(0).oldX, myMoves.get(0).oldY, myMoves.get(0).newX, myMoves.get(0).newY, alpha, beta, depth, color);
-            else
-                myTable.myTable[indx].setVal(negaMax, myMoves.get(0).oldX, myMoves.get(0).oldY, myMoves.get(0).newX, myMoves.get(0).newY, alpha, beta, depth, color);
+            if (tempPos != null && tempPos.depth <= depth) {
+                myTable.remove(indx);
+                myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth));
+            }
 
-        }
-        else {
-            negaMax = myTable.myTable[indx].myValue;
+            else if (tempPos == null && myTable.size() <= MAX_HASH)
+                myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth));
+
         }
 
         if (myMoves.get(0).undoMove(board))
@@ -242,21 +245,25 @@ public class Black extends Player {
             */
 
             indx = myZobrist.getZobristHash(opponent, this, false);
+            tempPos = myTable.get(indx);
 
-            if (myTable.myTable[indx] == null || myTable.myTable[indx].depth < depth || myTable.myTable[indx].player != color) {
+            if (tempPos != null && ( (tempPos.alpha < tempPos.myValue && tempPos.myValue < tempPos.beta) || (tempPos.alpha <= alpha && beta <= tempPos.beta)) && tempPos.depth >= depth )
+                temp = tempPos.myValue;
+
+            else {
                 incrementMoves();
                 temp = opponent.chooseMove(board, choice, this, depth - 1, -beta, -alpha, oldTime);
                 //System.out.printf("%d Black value\n", temp);
                 decrementMoves();
 
-                if (myTable.myTable[indx] == null)
-                  myTable.myTable[indx] = new PosnValue(negaMax, myMoves.get(x).oldX, myMoves.get(x).oldY, myMoves.get(x).newX, myMoves.get(x).newY, alpha, beta, depth, color);
-                else
-                  myTable.myTable[indx].setVal(negaMax, myMoves.get(x).oldX, myMoves.get(x).oldY, myMoves.get(x).newX, myMoves.get(x).newY, alpha, beta, depth, color);
-            }
+                if (tempPos != null && tempPos.depth <= depth) {
+                    myTable.remove(indx);
+                    myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth));
+                }
 
-            else {
-                temp = myTable.myTable[indx].myValue;
+                else if (tempPos == null && myTable.size() <= MAX_HASH)
+                    myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth));
+
             }
 
             if (myMoves.get(x).undoMove(board))
