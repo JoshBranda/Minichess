@@ -83,7 +83,7 @@ public class Main {
         }
         */
 
-        if (args.length < 2 && args[0].equals("diagnostic")) {
+        if (args.length == 1 && args[0].equals("diagnostic")) {
             int myMax = 2530963;
             int y = 0;
             int one = 0, two = 0, three = 0, four = 0, five = 0, six = 0, seven = 0;
