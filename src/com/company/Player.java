@@ -11,7 +11,7 @@ abstract class Player {
     //protected static final long cap = 2500;
     protected static int depth;
     protected static final int MAX = 41;
-    protected static final int MAX_HASH = 1299827;
+    //protected static final int MAX_HASH = 1299827;
 
     protected long cap;
     protected long totalTime;
@@ -22,12 +22,13 @@ abstract class Player {
 
     protected boolean checkMate;
 
-    protected HashMap<Long, PosnValue> myTable;
+    //protected HashMap<Long, PosnValue> myTable;
+    protected HashTable myTable;
     protected Zobrist myZobrist;
 
     public Player() {};
 
-    public Player(int startMoves, HashMap<Long, PosnValue> toTable, Zobrist toZob) {
+    public Player(int startMoves, HashTable toTable, Zobrist toZob) {
         moveCount = startMoves;
         checkMate = false;
         totalTime = 300000;
@@ -36,7 +37,7 @@ abstract class Player {
     };
 
     public void setCap(long toSet) {cap = toSet;}
-    public void subtractTime(long toSubtract) {totalTime-= toSubtract;}
+    public void subtractTime(long toSubtract) {totalTime = totalTime - toSubtract;}
     public void incrementMoves() {moveCount++;}
     public void decrementMoves() {moveCount--;}
     public int getMoves() {return moveCount;}

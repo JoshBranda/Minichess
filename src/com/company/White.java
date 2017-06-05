@@ -6,7 +6,7 @@ package com.company;
 import java.util.*;
 
 public class White extends Player {
-    public White(char [][] board, int startMoves, HashMap<Long, PosnValue> toHash, Zobrist toZob) {
+    public White(char [][] board, int startMoves, HashTable toHash, Zobrist toZob) {
         super(startMoves, toHash, toZob);
 
         pieces = new ArrayList();
@@ -51,18 +51,12 @@ public class White extends Player {
         int [] choice2 = new int[4];
         long currentTime = System.currentTimeMillis();
 
-        /*
-        depth = 6;
-        int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
-        */
-        /*
-        if (moveCount > 2) {
 
             cap = totalTime / (MAX - moveCount);
             //cap = 2500;
             opponent.setCap(this.cap);
 
-            for (int x = 1; x < MAX - moveCount; x++) {
+            for (int x = 1; x < (MAX - moveCount + 1); x++) {
                 depth = x;
                 int negVal = -chooseMove(board, choice2, opponent, depth, -200000, 200000, currentTime);
                 if (negVal == -100000)
@@ -76,21 +70,16 @@ public class White extends Player {
                 if (negVal == 100000)
                     break;
             }
-        }
 
-        else {
+            System.out.printf("Depth: %d\n", depth);
 
-            depth = moveCount * 2;
-            cap = 300000;
-            opponent.setCap(this.cap);
-            int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
-        }
-        */
 
+        /*
         depth = 10;
         cap = 300000;
         opponent.setCap(this.cap);
         int negVal = -chooseMove(board, choice, opponent, depth, -200000, 200000, currentTime);
+        */
 
         char one = (char)(5 - choice[0] + 49); //Convert the coordinates into readable moves for display
         char two = (char)(choice[1] + 97);
@@ -171,20 +160,18 @@ public class White extends Player {
             return -100000;
         }
 
+        if (depth == this.depth) {
+            myMoves.get(0).setChoice(choice);
+        }
+
         if (z == 1)
             addQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY(), 'Q');
 
-        /*
-        incrementMoves();
-        negaMax = opponent.chooseMove(board, choice, this, depth - 1, -beta, -alpha, oldTime);
-        //System.out.printf("%d value\n", negaMax);
-        decrementMoves();
-        */
-
-        long indx = myZobrist.getZobristHash(this, opponent, true);
+        int indx = myZobrist.getZobristHash(this, opponent, true);
+        long tempPosition = myZobrist.getPosition();
         PosnValue tempPos = myTable.get(indx);
 
-        if (tempPos != null && ( (tempPos.alpha < tempPos.myValue && tempPos.myValue < tempPos.beta) || (tempPos.alpha <= alpha && beta <= tempPos.beta)) && tempPos.depth >= depth )
+        if (tempPos != null && tempPos.position == tempPosition  && ( (tempPos.alpha < tempPos.myValue && tempPos.myValue < tempPos.beta) || (tempPos.alpha <= alpha && beta <= tempPos.beta)) && tempPos.depth >= depth )
             negaMax = tempPos.myValue;
 
         else {
@@ -194,12 +181,13 @@ public class White extends Player {
             decrementMoves();
 
             if (tempPos != null && tempPos.depth <= depth) {
-                myTable.remove(indx);
-                myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth));
+                //myTable.remove(indx);
+                myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth, tempPosition));
             }
 
-            else if (tempPos == null && myTable.size() <= MAX_HASH)
-                myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth));
+            //else if (tempPos == null && myTable.size() <= MAX_HASH)
+            else if (tempPos == null)
+                myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth, tempPosition));
 
         }
 
@@ -246,9 +234,10 @@ public class White extends Player {
             */
 
             indx = myZobrist.getZobristHash(this, opponent, true);
+            tempPosition = myZobrist.getPosition();
             tempPos = myTable.get(indx);
 
-            if (tempPos != null && ( (tempPos.alpha < tempPos.myValue && tempPos.myValue < tempPos.beta) || (tempPos.alpha <= alpha && beta <= tempPos.beta)) && tempPos.depth >= depth )
+            if (tempPos != null && tempPos.position == tempPosition && ( (tempPos.alpha < tempPos.myValue && tempPos.myValue < tempPos.beta) || (tempPos.alpha <= alpha && beta <= tempPos.beta)) && tempPos.depth >= depth )
                 temp = tempPos.myValue;
 
             else {
@@ -258,12 +247,12 @@ public class White extends Player {
                 decrementMoves();
 
                 if (tempPos != null && tempPos.depth <= depth) {
-                    myTable.remove(indx);
-                    myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth));
+                    //myTable.remove(indx);
+                    myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth, tempPosition));
                 }
 
-                else if (tempPos == null && myTable.size() <= MAX_HASH)
-                    myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth));
+                else if (tempPos == null)
+                    myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth, tempPosition));
             }
 
             if (myMoves.get(x).undoMove(board))

@@ -13,7 +13,6 @@ public class Main {
         String row;
         int rows, columns;
         long elapsed, start;
-        boolean diagnostic = true;
 
         Scanner input = new Scanner(System.in);
 
@@ -46,10 +45,28 @@ public class Main {
         toCopy[5][3] = 'Q';
         toCopy[5][4] = 'K';
 
-        HashMap<Long, PosnValue> myHash;
+        //HashMap<Long, PosnValue> myHash;
         //myHash = new HashMap(1299827, 1);
         //myHash = new HashMap<Long, PosnValue>();
+        HashTable myHash;
+        //myHash = new HashTable();
 
+        try {
+            FileInputStream fileIn = new FileInputStream("CustomTable.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            myHash = (HashTable) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (IOException i) {
+            i.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("TTable not found");
+            c.printStackTrace();
+            return;
+        }
+
+        /*
         try {
             FileInputStream fileIn = new FileInputStream("TranspositionTable.ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -64,21 +81,74 @@ public class Main {
             c.printStackTrace();
             return;
         }
+        */
 
-        if (args.length < 3 && args[0].equals("diagnostic")) {
-            System.out.printf("Your hash size is: %d\n", myHash.size());
+        if (args.length < 2 && args[0].equals("diagnostic")) {
+            int myMax = 2530963;
+            int y = 0;
+            int one = 0, two = 0, three = 0, four = 0, five = 0, six = 0, seven = 0;
+            int eight = 0, nine = 0, ten = 0, eleven = 0, twelve = 0, thirteen = 0, fourteen = 0, fifteen = 0;
 
-            int w = Integer.parseInt(args[1]);
-            int v = 0;
-
-            for (long key : myHash.keySet()) {
-                System.out.println("------------------------------------------------");
-                myHash.get(key).display();
-                //System.out.println("key: " + key + " value: " + loans.get(key));
-                if (v > w)
-                    break;
-                v++;
+            for (int x = 0; x < myMax; x++) {
+                if (myHash.get(x) != null) {
+                    y++;
+                    switch(myHash.get(x).depth) {
+                        case(1):
+                            one++;
+                            break;
+                        case(2):
+                            two++;
+                            break;
+                        case(3):
+                            three++;
+                            break;
+                        case(4):
+                            four++;
+                            break;
+                        case(5):
+                            five++;
+                            break;
+                        case(6):
+                            six++;
+                            break;
+                        case(7):
+                            seven++;
+                            break;
+                        case(8):
+                            eight++;
+                            break;
+                        case(9):
+                            nine++;
+                            break;
+                        case(10):
+                            ten++;
+                            break;
+                        case(11):
+                            eleven++;
+                            break;
+                        case(12):
+                            twelve++;
+                            break;
+                        case(13):
+                            thirteen++;
+                            break;
+                        case(14):
+                            fourteen++;
+                            break;
+                        case(15):
+                        case(16):
+                        case(17):
+                        case(18):
+                            fifteen++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
+
+            System.out.printf("Your hash size is: %d\n", y);
+            System.out.printf("Depths: 1:%d\n2:%d\n3:%d\n4:%d\n5:%d\n6:%d\n7:%d\n8:%d\n9:%d\n10:%d\n11:%d\n12:%d\n13:%d\n14:%d\n15:%d\n", one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen);
 
             return;
         }
@@ -100,9 +170,6 @@ public class Main {
             c.printStackTrace();
             return;
         }
-
-        //System.out.println(myZob.zArray[1][1][1]);
-        //System.out.println();
 
         //This should only be used once when creating the zobrist file
         /*
@@ -137,7 +204,7 @@ public class Main {
                 if (x == 0)
                     break;
 
-                elapsed = start - System.currentTimeMillis();
+                elapsed = System.currentTimeMillis() - start;
                 myWhite.subtractTime(elapsed);
 
                 System.out.println("Your move");
@@ -234,20 +301,17 @@ public class Main {
                     if (myWhite.getMoves() >= 41)
                         break;
 
-                    if (x == 0)
+                    if (x == 0) //Check to see if your move just won the game
                         break;
 
-                    elapsed = start - System.currentTimeMillis();
+                    elapsed = System.currentTimeMillis() - start;
                     myWhite.subtractTime(elapsed);
-
-                    //start = System.currentTimeMillis();
 
                     row = myClient.getMove();
 
                     if (row == null)
                         break;
 
-                    //myWhite.correctTime(System.currentTimeMillis() - start);
                     start = System.currentTimeMillis();
 
                     for (int z = 0; z < 5; z++) {
@@ -281,7 +345,7 @@ public class Main {
                         myTemp.setXY(newX, newY);
                     }
 
-                    if (temp == 'K') {
+                    if (temp == 'K') { //Check to see if your opponent just won the game
                         System.out.println("Black wins!");
                         break;
                     }
@@ -348,7 +412,13 @@ public class Main {
 
                     myClient.sendMove(choice);
 
-                    elapsed = start - System.currentTimeMillis();
+                    if (myBlack.getMoves() >= 41)
+                        break;
+
+                    if (x == 0)
+                        break;
+
+                    elapsed = System.currentTimeMillis() - start;
                     myBlack.subtractTime(elapsed);
 
                     //start = System.currentTimeMillis();
@@ -379,24 +449,24 @@ public class Main {
 
                     int x = myWhite.makeMove(toCopy, myBlack, myChoice);
 
-                    if (x == 0)
-                        break;
-
                     String choice = new String(myChoice);
 
                     myClient.sendMove(choice);
 
-                    elapsed = start - System.currentTimeMillis();
-                    myWhite.subtractTime(elapsed);
+                    if (myWhite.getMoves() >= 41)
+                        break;
 
-                    //start = System.currentTimeMillis();
+                    if (x == 0)
+                        break;
+
+                    elapsed = System.currentTimeMillis() - start;
+                    myWhite.subtractTime(elapsed);
 
                     row = myClient.getMove();
 
                     if (row == null)
                         break;
 
-                    //myWhite.correctTime(System.currentTimeMillis() - start);
                     start = System.currentTimeMillis();
 
                     for (int z = 0; z < 5; z++) {
@@ -491,14 +561,17 @@ public class Main {
 
                     int x = myBlack.makeMove(toCopy, myWhite, myChoice);
 
-                    if (x == 0)
-                        break;
-
                     String choice = new String(myChoice);
 
                     myClient.sendMove(choice);
 
-                    elapsed = start - System.currentTimeMillis();
+                    if (myBlack.getMoves() >= 41)
+                        break;
+
+                    if (x == 0)
+                        break;
+
+                    elapsed = System.currentTimeMillis() - start;
                     myBlack.subtractTime(elapsed);
                 }
             }
@@ -506,6 +579,19 @@ public class Main {
         }
 
 
+        try {
+            FileOutputStream fileOut =
+                    new FileOutputStream("CustomTable.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(myHash);
+            out.close();
+            fileOut.close();
+            System.out.printf("Serialized hash map is saved in CustomTable.ser");
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+
+        /*
         try {
             FileOutputStream fileOut =
                     new FileOutputStream("TranspositionTable.ser");
@@ -517,5 +603,6 @@ public class Main {
         } catch (IOException i) {
             i.printStackTrace();
         }
+        */
     }
 }

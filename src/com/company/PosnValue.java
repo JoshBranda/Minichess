@@ -10,6 +10,7 @@ public class PosnValue implements Serializable{
     public int alpha;
     public int beta;
     public int depth;
+    public long position;
 
 
     public PosnValue () {
@@ -21,25 +22,27 @@ public class PosnValue implements Serializable{
         alpha = toCopy.alpha;
         beta = toCopy.beta;
         depth = toCopy.depth;
-
+        position = toCopy.position;
     }
 
-    public PosnValue (int toValue, int toAl, int toBe, int toDepth) {
+    public PosnValue (int toValue, int toAl, int toBe, int toDepth, long toPosition) {
 
         myValue = toValue;
 
         alpha = toAl;
         beta = toBe;
         depth = toDepth;
+        position = toPosition;
     }
 
-    public void setVal (int toValue, int toAl, int toBe, int toDepth) {
+    public void setVal (int toValue, int toAl, int toBe, int toDepth, long toPosition) {
 
         myValue = toValue;
 
         alpha = toAl;
         beta = toBe;
         depth = toDepth;
+        position = toPosition;
     }
 
     public void display () {

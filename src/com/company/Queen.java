@@ -4,10 +4,8 @@ import java.util.*;
  * Created by joshuasander on 5/12/17.
  */
 public class Queen extends Piece {
-    public Queen() {
-    }
+    public Queen() {}
 
-    ;
 
     public Queen(int toX, int toY, char color) {
         super(toX, toY);
@@ -16,7 +14,6 @@ public class Queen extends Piece {
         type = 4;
     }
 
-    ;
 
     public char getChar() {
         return color;

@@ -14,12 +14,6 @@ public class Zobrist implements Serializable{
     public long zobrist;
     private int hashVal;
 
-    /*
-    public long random64() {
-        SecureRandom random = new SecureRandom();
-        return random.nextLong();
-    }
-    */
     public static long random64() {
         return (long)(Math.random()*1000000000000000000L);
     }
@@ -38,7 +32,7 @@ public class Zobrist implements Serializable{
             }
         }
         zBlackMove = random64();
-        hashVal = 1299827;
+        hashVal = 2530963;
     }
 
     public Zobrist(Zobrist toCopy) {
@@ -56,7 +50,8 @@ public class Zobrist implements Serializable{
         hashVal = toCopy.hashVal;
     }
 
-    public long getZobristHash(White white, Black black, boolean whiteOnMove) {
+    public int getZobristHash(White white, Black black, boolean whiteOnMove) {
+        long toReturn = 0;
         zobrist = 0;
 
         white.calculateZobrist(this);
@@ -65,11 +60,13 @@ public class Zobrist implements Serializable{
         if (!whiteOnMove)
             zobrist ^= zBlackMove;
 
-        //zobrist = zobrist % hashVal;
+        toReturn = zobrist % hashVal;
 
         //System.out.println(zobrist);
 
-        return zobrist;
+        return (int)toReturn;
 
     }
+
+    public long getPosition() {return zobrist;}
 }
