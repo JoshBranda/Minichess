@@ -45,44 +45,11 @@ public class Main {
         toCopy[5][3] = 'Q';
         toCopy[5][4] = 'K';
 
-        //HashMap<Long, PosnValue> myHash;
-        //myHash = new HashMap(1299827, 1);
-        //myHash = new HashMap<Long, PosnValue>();
         HashTable myHash;
-        //myHash = new HashTable();
+        myHash = new HashTable();
 
-        try {
-            FileInputStream fileIn = new FileInputStream("CustomTable.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            myHash = (HashTable) in.readObject();
-            in.close();
-            fileIn.close();
-        } catch (IOException i) {
-            i.printStackTrace();
-            return;
-        } catch (ClassNotFoundException c) {
-            System.out.println("TTable not found");
-            c.printStackTrace();
-            return;
-        }
 
         /*
-        try {
-            FileInputStream fileIn = new FileInputStream("TranspositionTable.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            myHash = (HashMap) in.readObject();
-            in.close();
-            fileIn.close();
-        } catch (IOException i) {
-            i.printStackTrace();
-            return;
-        } catch (ClassNotFoundException c) {
-            System.out.println("TTable not found");
-            c.printStackTrace();
-            return;
-        }
-        */
-
         if (args.length == 1 && args[0].equals("diagnostic")) {
             int myMax = 2530963;
             int y = 0;
@@ -152,39 +119,11 @@ public class Main {
 
             return;
         }
-
-        //Zobrist myZob = new Zobrist();
-        Zobrist myZob = null;
-
-        try {
-            FileInputStream fileIn = new FileInputStream("test.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            myZob = (Zobrist) in.readObject();
-            in.close();
-            fileIn.close();
-        } catch (IOException i) {
-            i.printStackTrace();
-            return;
-        } catch (ClassNotFoundException c) {
-            System.out.println("Zobrist not found");
-            c.printStackTrace();
-            return;
-        }
-
-        //This should only be used once when creating the zobrist file
-        /*
-        try {
-            FileOutputStream fileOut =
-                    new FileOutputStream("test.ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(myZob);
-            out.close();
-            fileOut.close();
-            //System.out.printf("Serialized data is saved in test.ser");
-        }catch(IOException i) {
-            i.printStackTrace();
-        }
         */
+
+        Zobrist myZob = new Zobrist();
+        //Zobrist myZob = null;
+
 
         White myWhite = new White(toCopy, 1, myHash, myZob);
         Black myBlack = new Black(toCopy, 1, myHash, myZob);
@@ -306,6 +245,7 @@ public class Main {
 
                     elapsed = System.currentTimeMillis() - start;
                     myWhite.subtractTime(elapsed);
+                    myWhite.displayTime();
 
                     row = myClient.getMove();
 
@@ -579,30 +519,6 @@ public class Main {
         }
 
 
-        try {
-            FileOutputStream fileOut =
-                    new FileOutputStream("CustomTable.ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(myHash);
-            out.close();
-            fileOut.close();
-            System.out.printf("Serialized hash map is saved in CustomTable.ser");
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
 
-        /*
-        try {
-            FileOutputStream fileOut =
-                    new FileOutputStream("TranspositionTable.ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(myHash);
-            out.close();
-            fileOut.close();
-            System.out.printf("Serialized hash map is saved in TranspositionTable.ser");
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
-        */
     }
 }

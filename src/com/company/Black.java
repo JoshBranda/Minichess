@@ -191,8 +191,6 @@ public class Black extends Player {
             return 1;
         }
 
-        if (depth == this.depth)
-            myMoves.get(0).setChoice(choice);
 
         if (negaMax > beta) {
             return -negaMax;
@@ -209,7 +207,7 @@ public class Black extends Player {
 
             if (z == -1) {
                 if (depth == this.depth) {
-                    myMoves.get(0).setChoice(choice);
+                    myMoves.get(x).setChoice(choice);
                 }
                 return -100000;
             }

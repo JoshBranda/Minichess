@@ -41,6 +41,7 @@ abstract class Player {
     public void incrementMoves() {moveCount++;}
     public void decrementMoves() {moveCount--;}
     public int getMoves() {return moveCount;}
+    public void displayTime() {System.out.println(totalTime);}
 
     public int evalPlayer() {
         int total = 0;

@@ -53,6 +53,7 @@ public class White extends Player {
 
 
             cap = totalTime / (MAX - moveCount);
+            System.out.printf("Your cap is: %d, totalTime: %d, moveCount: %d\n", cap, totalTime, moveCount);
             //cap = 2500;
             opponent.setCap(this.cap);
 
@@ -197,10 +198,6 @@ public class White extends Player {
         if (System.currentTimeMillis() > oldTime + cap) {
             choice[0] = -1;
             return 1;
-        }
-
-        if (depth == this.depth) {
-            myMoves.get(0).setChoice(choice);
         }
 
         if (negaMax > beta) {
