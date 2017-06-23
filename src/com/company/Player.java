@@ -1,17 +1,16 @@
 package com.company;
 /**
  * Created by joshuasander on 4/28/17.
+ * This is the abstract player class used by White and Black.  See Black for details.
  */
-import java.util.HashMap;
+
 import java.util.List;
 
 abstract class Player {
-    protected static final int rows = 6;
-    protected static final int columns = 5;
-    //protected static final long cap = 2500;
-    protected static int depth;
-    protected static final int MAX = 41;
-    //protected static final int MAX_HASH = 1299827;
+    protected static final int rows = 6; //Can be changed for full-sized chess
+    protected static final int columns = 5; // '' ''
+    protected static int depth; //Depth for interative deepening
+    protected static final int MAX = 41; //Maximum number of turns allowed
 
     protected long cap;
     protected long totalTime;
@@ -22,7 +21,6 @@ abstract class Player {
 
     protected boolean checkMate;
 
-    //protected HashMap<Long, PosnValue> myTable;
     protected HashTable myTable;
     protected Zobrist myZobrist;
 
@@ -55,11 +53,8 @@ abstract class Player {
     //Find the piece that was taken among this players list and set it to taken
     public Piece takenPiece(int toX, int toY) {
         for (Piece piece: pieces) {
-            if (piece.checkXY(toX, toY)) {
-//                piece.setTaken();
-
+            if (piece.checkXY(toX, toY))
                 return piece;
-            }
         }
         return null;
     }
@@ -112,22 +107,6 @@ abstract class Player {
             System.out.println();
         }
     }
-
-    public void dislpayPieces() {
-        for (Piece piece: pieces)
-            System.out.print(piece.getChar());
-        System.out.println();
-    }
-
-    public void displayPositions() {
-        for (Piece piece: pieces) {
-            System.out.printf("%c %d%d\n", piece.getChar(), piece.getX(), piece.getY());
-        }
-        System.out.println();
-    }
-
-    void setCheck(boolean toSet) {checkMate = toSet;};
-    void setPromote(boolean toSet) {checkMate = toSet;};
 
     public void calculateZobrist(Zobrist myZobrist) {
         for (Piece piece: pieces) {

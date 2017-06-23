@@ -2,6 +2,7 @@
 package com.company;
 /**
  * Created by joshuasander on 4/28/17.
+ * White's functions are mirrored by Black.  See black for comments/details
  */
 import java.util.*;
 

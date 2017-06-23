@@ -10,6 +10,7 @@ public class Black extends Player {
 
         pieces = new ArrayList();
 
+        //Scan the board (2-d char array) and add all pieces belonging to this player to their pieces list.
         for (int x = 0; x < rows; x++) {
             for (int y = 0; y < columns; y++) {
                 switch (board[x][y]) {
@@ -47,13 +48,13 @@ public class Black extends Player {
             return 0;
         }
 
-        int[] choice = new int[4];
-        int[] choice2 = new int[4];
+        int[] choice = new int[4]; //Master choice
+        int[] choice2 = new int[4]; //Choice for each iterative deepening step, ignored of deepening terminated
         long currentTime = System.currentTimeMillis();
 
-            cap = totalTime / (MAX - moveCount);
+            cap = totalTime / (MAX - moveCount);  //Calculate average move time remaining
             //cap = 2500;
-            opponent.setCap(this.cap);
+            opponent.setCap(this.cap); //Concord other player with the same move time
 
             for (int x = 1; x < (MAX - moveCount + 1); x++) {
                 depth = x;
@@ -82,19 +83,23 @@ public class Black extends Player {
         char three = (char) (5 - choice[2] + 49);
         char four = (char) (choice[3] + 97);
 
+        //Store the values in variables which are easier to reference
         int oldX = choice[0], oldY = choice[1], newX = choice[2], newY = choice[3];
 
+        //Value of the spot to be replaced
         char temp = board[newX][newY];
 
-
+        //Get the piece that is to be moved
         Piece myTemp = takenPiece(oldX, oldY);
 
+        //Check for attack
         if (Character.isUpperCase(board[newX][newY])) {
             opponent.removePiece(newX, newY);
         }
 
         int index;
 
+        //Check for promotion
         if (newX == 0 && myTemp.getChar() == 'p') {
             board[newX][newY] = 'q';
             board[oldX][oldY] = '.';
@@ -121,6 +126,7 @@ public class Black extends Player {
 
         System.out.printf("%c%c-%c%c\n", two, one, four, three);
 
+        //Check for game over
         if (temp == 'K') {
             System.out.println("Black wins!");
             return 0;
@@ -143,10 +149,13 @@ public class Black extends Player {
             pieces.get(x).checkMoves(board, opponent, myMoves);
         }
 
+        //Sort the moves by those scoring the hightest points first
         Collections.sort(myMoves);
 
+        //Make the first move
         int z = myMoves.get(0).makeMove(board);
 
+        //Found a win
         if (z == -1) {
             if (depth == this.depth) {
                 myMoves.get(0).setChoice(choice);
@@ -154,27 +163,32 @@ public class Black extends Player {
             return -100000;
         }
 
+        //Set the choice to the first move so that it is not null if all choices are of equal value
         if (depth == this.depth) {
             myMoves.get(0).setChoice(choice);
         }
 
+        //Check for promotion
         if (z == 1)
             addQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY(), 'q');
 
+        //Get the index in the hashtable for this position
         int indx = myZobrist.getZobristHash(opponent, this, false);
+        //Get the identifier for this position.  There is a chance of collision with another long identifier, but small
         long tempPosition = myZobrist.getPosition();
         PosnValue tempPos = myTable.get(indx);
 
+        //If the hashtable stores useful information, we can avoid the longer move evaluation
         if (tempPos != null && tempPos.position == tempPosition && ( (tempPos.alpha < tempPos.myValue && tempPos.myValue < tempPos.beta) || (tempPos.alpha <= alpha && beta <= tempPos.beta)) && tempPos.depth >= depth )
             negaMax = tempPos.myValue;
 
+        //The hashtable did not store useful information
         else {
             incrementMoves();
             negaMax = opponent.chooseMove(board, choice, this, depth - 1, -beta, -alpha, oldTime);
             decrementMoves();
 
             if (tempPos != null && tempPos.depth <= depth) {
-          //      myTable.remove(indx);
                 myTable.put(indx,  new PosnValue(negaMax, alpha, beta, depth, tempPosition));
             }
 
@@ -186,11 +200,11 @@ public class Black extends Player {
         if (myMoves.get(0).undoMove(board))
             removeQueen(myMoves.get(0).getNewX(), myMoves.get(0).getNewY());
 
+        //Check to make sure time hasn't expired.  Nullify search if it has.
         if (System.currentTimeMillis() > oldTime + cap) {
             choice[0] = -1;
             return 1;
         }
-
 
         if (negaMax > beta) {
             return -negaMax;

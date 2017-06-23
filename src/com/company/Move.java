@@ -144,30 +144,4 @@ public class Move implements Comparable<Move>{
         toSet[3] = newY;
     }
 
-    public void restoreBoard(char [][] board) {
-       // if (promotion == false) {
-            board[newX][newY] = takenPiece;
-            board[oldX][oldY] = attackPiece;
-       /* }
-        else {
-            if (attackPiece == 'Q') {
-                board[newX][newY] = takenPiece;
-                board[oldX][oldY] = 'P';
-                promotion = false;
-            }
-            else if (attackPiece == 'q') {
-                board[newX][newY] = takenPiece;
-                board[oldX][oldY] = 'p';
-                promotion = false;
-            }
-        }
-        */
-    }
-
-    public void display() {
-        System.out.printf("%d%d to %d%d\n", oldX, oldY, newX, newY);
-    }
-    public void displayLine() {
-        System.out.printf("%d%d to %d%d ", oldX, oldY, newX, newY);
-    }
 }
