@@ -10,7 +10,7 @@ This program is an artificial intelligence minichess player.  This readme file w
 5. Domain analysis/future improvements
 
 ## How to run the program
-Using a Linux terminal with all of the source code in a single folder, use javac *.java to compile everything.  Next, use Java Main command to run the program.  This will allow you to play against the computer with the comptuer as White and you as Black.
+Using a Linux terminal with all of the source code in a single folder, use javac on all of the .java files to compile everything.  Next, use Java Main command to run the program.  This will allow you to play against the computer with the computer as White and you as Black.
 
 ## What is Minichess?
 A full explanation of the rules of minichess can be found here:
